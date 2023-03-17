@@ -18,47 +18,32 @@ let initialSearch: OInputSearchValue = {
 	value: null,
 }
 
+let initialPaginationState = {
+	currentPage: 1,
+	resultsPerPage: parseInt(resultsOptions[2].label),
+}
+
 const PaginationButton = ({
 	label,
+	isActive,
 	handlePagination,
-}: OLabel & {handlePagination: (e: OClick) => void}) => {
+}: OLabel & {handlePagination: (e: OClick) => void; isActive?: boolean}) => {
 	return (
 		<button
 			onClick={handlePagination}
-			className={"btn-pagination"}>
+			className={`btn-pagination ${isActive && " btn-pagination--active "}`}>
 			{label}
 		</button>
 	)
 }
 
 export function TeamMembers() {
-	const [sortColumn, setSortColumn] = useReducer(
-		(prevState: typeof initialSortingState, action: typeof initialSortingState) => ({
-			...prevState,
-			...action,
-		}),
-		initialSortingState
-	)
-	const [searchFilter, setSearchFilter] = useReducer(
-		(prevState: typeof initialSearch, action: typeof initialSearch) => ({
-			...prevState,
-			...action,
-		}),
-		initialSearch
-	)
-
-	const [resultsPerPage, setResultsPerPage] = useState(parseInt(resultsOptions[2].label))
-	const [currentPage, setCurrentPage] = useState(1)
-
-	useEffect(() => {
-		console.log("rerrender")
-		setCurrentPage(1)
-	}, [sortColumn, searchFilter, resultsPerPage])
-
+	const [resultsPerPage, setResultsPerPage] = useState(initialPaginationState.resultsPerPage)
+	const [currentPage, setCurrentPage] = useState(initialPaginationState.currentPage)
 
 	const numberOfPages = useMemo(
 		() => Math.ceil(listOf20MockedEmployees.length / resultsPerPage),
-		[listOf20MockedEmployees, resultsPerPage]
+		[resultsPerPage]
 	)
 	const listOfPages = useMemo(() => {
 		let pages = []
@@ -66,17 +51,56 @@ export function TeamMembers() {
 			pages.push(i)
 		}
 		return pages
-	}, [numberOfPages, currentPage])
+	}, [numberOfPages])
+	const [sortColumn, setSortColumn] = useReducer(
+		(prevState: typeof initialSortingState, action: typeof initialSortingState) => ({
+			...prevState,
+			...action,
+		}),
+		initialSortingState
+	)
+
+	const [searchFilter, setSearchFilter] = useReducer(
+		(prevState: typeof initialSearch, action: typeof initialSearch) => ({
+			...prevState,
+			...action,
+		}),
+		initialSearch
+	)
+	// Reset current page to 1 when results per page changes or Search filter changes
+	useEffect(() => {
+		setCurrentPage(initialPaginationState.currentPage)
+	}, [resultsPerPage, searchFilter])
+
+	// Reset Search filter to null when results per page changes
+	useEffect(() => {
+		setSearchFilter(initialSearch)
+	}, [resultsPerPage])
+
+	// useEffect(() => {
+	// 	setSearchFilter(initialSearch)
+	// }, [resultsPerPage, currentPage])
 
 	const onSelectNumberOfResults = e => setResultsPerPage(parseInt(e.currentTarget.value))
+
 	const onSort = ({path}: OColumnPath) => {
-		if (sortColumn.path === path)
+		if (sortColumn.path === path) {
 			return setSortColumn({
 				...sortColumn,
 				order: sortColumn.order === "asc" ? "desc" : "asc",
 			})
+		}
 		return setSortColumn({path, order: "asc"})
 	}
+
+	// useEffect(() => {
+	// 	console.log("rerrender")
+	// 	setSearchFilter(initialSearch)
+	// 	setSortColumn(initialSortingState)
+	// 	setResultsPerPage(initialPaginationState.resultsPerPage)
+	// 	setCurrentPage(initialPaginationState.currentPage) // reset to first page when results per page changes
+	// }, [sortColumn, searchFilter, resultsPerPage])
+
 	const onFilter = e => setSearchFilter({value: e.currentTarget.value})
 	const checkForSorting = ({path}: OColumnPath) =>
 		sortColumn.path === path ? sortColumn.order : null
@@ -91,6 +115,46 @@ export function TeamMembers() {
 			}
 		})
 	}, [currentPage, resultsPerPage])
+
+	const filteredEmployees = useMemo(() => {
+		console.log(searchFilter.value === null ||
+					searchFilter.value.trim() === "" ||
+					searchFilter.value.trim() === " " ||
+					searchFilter.value.trim().length < 3)
+		return [...pagination].filter(employee => {
+			if (
+				searchFilter.value === null ||
+				searchFilter.value.trim() === "" ||
+				searchFilter.value.trim() === " " ||
+				searchFilter.value.trim().length < 1
+			)
+				return employee
+			return (
+				employee.firstName.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+				employee.lastName.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+				employee.startingDate
+					.toDateString()
+					.toLowerCase()
+					.includes(searchFilter.value.toLowerCase()) ||
+				employee.department.toString().toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+				employee.dateOfBirth
+					.toDateString()
+					.toLowerCase()
+					.includes(searchFilter.value.toLowerCase()) ||
+				employee.street.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+				employee.city.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+				employee.zipCode.toLowerCase().includes(searchFilter.value.toLowerCase())
+			)
+		})
+	}, [searchFilter])
+
+	const sortedEmployees = useMemo(() => {
+		return [...filteredEmployees].sort((a, b) => {
+			if (a[sortColumn.path] < b[sortColumn.path]) return sortColumn.order === "asc" ? -1 : 1
+			if (a[sortColumn.path] > b[sortColumn.path]) return sortColumn.order === "asc" ? 1 : -1
+			return 0
+		})
+	}, [sortColumn, searchFilter])
 
 	return (
 		<PageTemplate activeRoute={"Team Members"}>
@@ -108,12 +172,11 @@ export function TeamMembers() {
 					</div>
 					<div className="filter">
 						<InputTextBox
-							{...{
-								slug: "filter",
-								description: "",
-								label: `Search: ${searchFilter.value}`,
-								onChange: onFilter,
-							}}
+							value={searchFilter.value}
+							slug={"filter"}
+							description={""}
+							label={`Search: ${searchFilter.value}`}
+							onChange={onFilter}
 						/>
 					</div>
 				</header>
@@ -171,7 +234,7 @@ export function TeamMembers() {
 							</tr>
 						</thead>
 						<tbody>
-							{pagination.map(
+							{sortedEmployees.map(
 								({
 									city,
 									department,
@@ -209,6 +272,7 @@ export function TeamMembers() {
 					{listOfPages.map(i => (
 						<PaginationButton
 							label={i.toString()}
+							isActive={i === currentPage}
 							handlePagination={e => setCurrentPage(i)}
 						/>
 					))}

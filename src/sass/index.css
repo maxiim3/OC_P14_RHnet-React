@@ -423,5 +423,10 @@ tbody tr td {
   background: #e1d9fa;
   gap: 4px;
 }
+.btn-pagination--active {
+  color: #e1d9fa;
+  border: 1px solid #7a67cc;
+  background: #7a67cc;
+}
 
 /*# sourceMappingURL=index.css.map */

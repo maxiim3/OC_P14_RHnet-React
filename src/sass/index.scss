@@ -586,4 +586,10 @@ tbody {
 	border-radius: 4px;
 	background: $clr-secondary-100;
 	gap: 4px;
+
+	&--active {
+		color: $clr-secondary-100;
+		border: 1px solid $clr-secondary-400;
+		background: $clr-secondary-400;
+	}
 }
