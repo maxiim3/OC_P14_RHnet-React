@@ -418,15 +418,26 @@ tbody tr td {
   height: 45px;
   padding: 4px 6px;
   color: #1b1263;
-  border: 1px solid #c3b5f6;
+  border: 1px solid #9d8ae5;
   border-radius: 4px;
-  background: #e1d9fa;
+  background: #c3b5f6;
   gap: 4px;
 }
 .btn-pagination--active {
-  color: #e1d9fa;
-  border: 1px solid #7a67cc;
-  background: #7a67cc;
+  color: #f7fad9;
+  border: 1px solid #bdcc67;
+  background: #bdcc67;
+}
+.btn-pagination--active:hover {
+  cursor: not-allowed;
+}
+.btn-pagination:disabled {
+  color: #c3b5f6;
+  border: 1px solid #e1d9fa;
+  background: #e1d9fa;
+}
+.btn-pagination:disabled:hover {
+  cursor: not-allowed;
 }
 
 /*# sourceMappingURL=index.css.map */

@@ -1,46 +1,67 @@
-import React, {useEffect, useMemo, useReducer, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import PageTemplate from "../templates/PageTemplate"
 import {InputSelector} from "../molecules/InputSelector"
 import {InputTextBox} from "../molecules/InputTextBox"
 import {ColumnHeadCell} from "../molecules/ColumnHeadCell"
-import {OClick, OColumnPath, OLabel, OSortingOrder} from "../../types"
+import {OColumnPath, OInputSearchValue, OSortingOrder} from "../../types"
 import {listOf20MockedEmployees} from "../../ListOf20MockedEmployees"
+import {PaginationButton} from "../atoms/PaginationButton"
 
-let initialSortingState: OColumnPath & OSortingOrder = {
-	path: "firstName",
-	order: "asc",
-}
-let resultsOptions = [{label: "1"}, {label: "3"}, {label: "5"}, {label: "10"}, {label: "15"}]
-type OInputSearchValue = {
-	value: string | null
-}
-let initialSearch: OInputSearchValue = {
-	value: null,
-}
-
-let initialPaginationState = {
-	currentPage: 1,
-	resultsPerPage: parseInt(resultsOptions[2].label),
-}
-
-const PaginationButton = ({
-	label,
-	isActive,
-	handlePagination,
-}: OLabel & {handlePagination: (e: OClick) => void; isActive?: boolean}) => {
-	return (
-		<button
-			onClick={handlePagination}
-			className={`btn-pagination ${isActive && " btn-pagination--active "}`}>
-			{label}
-		</button>
-	)
-}
-
-export function TeamMembers() {
+const useTeamMembers = () => {
+	let resultsOptions = [{label: "1"}, {label: "3"}, {label: "5"}, {label: "10"}, {label: "15"}]
+	let initialPaginationState = {
+		currentPage: 1,
+		resultsPerPage: parseInt(resultsOptions[2].label),
+	}
 	const [resultsPerPage, setResultsPerPage] = useState(initialPaginationState.resultsPerPage)
 	const [currentPage, setCurrentPage] = useState(initialPaginationState.currentPage)
+	let initialSortingState: OColumnPath & OSortingOrder = {
+		path: "firstName",
+		order: "asc",
+	}
 
+	const [sortColumn, setSortColumn] = useReducer(
+		(prevState: typeof initialSortingState, action: typeof initialSortingState) => ({
+			...prevState,
+			...action,
+		}),
+		initialSortingState
+	)
+
+	let initialSearch: OInputSearchValue = {
+		value: null,
+	}
+	const [searchFilter, setSearchFilter] = useReducer(
+		(prevState: typeof initialSearch, action: typeof initialSearch) => ({
+			...prevState,
+			...action,
+		}),
+		initialSearch
+	)
+	const onFilter = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter({value: e.currentTarget.value}),
+		[]
+	)
+	const onSort = useCallback(
+		({path}: OColumnPath) => {
+			if (sortColumn.path === path) {
+				return setSortColumn({
+					...sortColumn,
+					order: sortColumn.order === "asc" ? "desc" : "asc",
+				})
+			}
+			return setSortColumn({path, order: "asc"})
+		},
+		[sortColumn]
+	)
+	const isSorting = useCallback(
+		({path}: OColumnPath) => (sortColumn.path === path ? sortColumn.order : null),
+		[]
+	)
+	const onSelectNumberOfResults = useCallback(
+		e => setResultsPerPage(parseInt(e.currentTarget.value)),
+		[]
+	)
 	const numberOfPages = useMemo(
 		() => Math.ceil(listOf20MockedEmployees.length / resultsPerPage),
 		[resultsPerPage]
@@ -52,100 +73,41 @@ export function TeamMembers() {
 		}
 		return pages
 	}, [numberOfPages])
-	const [sortColumn, setSortColumn] = useReducer(
-		(prevState: typeof initialSortingState, action: typeof initialSortingState) => ({
-			...prevState,
-			...action,
-		}),
-		initialSortingState
-	)
-
-	const [searchFilter, setSearchFilter] = useReducer(
-		(prevState: typeof initialSearch, action: typeof initialSearch) => ({
-			...prevState,
-			...action,
-		}),
-		initialSearch
-	)
-	// Reset current page to 1 when results per page changes or Search filter changes
-	useEffect(() => {
-		setCurrentPage(initialPaginationState.currentPage)
-	}, [resultsPerPage, searchFilter])
-
-	// Reset Search filter to null when results per page changes
+	/**
+	 * Reset current page to 1 when results per page changes
+	 */
 	useEffect(() => {
 		setSearchFilter(initialSearch)
 	}, [resultsPerPage])
 
-	// useEffect(() => {
-	// 	setSearchFilter(initialSearch)
-	// }, [resultsPerPage, currentPage])
-
-	const onSelectNumberOfResults = e => setResultsPerPage(parseInt(e.currentTarget.value))
-
-	const onSort = ({path}: OColumnPath) => {
-		if (sortColumn.path === path) {
-			return setSortColumn({
-				...sortColumn,
-				order: sortColumn.order === "asc" ? "desc" : "asc",
-			})
-		}
-		return setSortColumn({path, order: "asc"})
-	}
-
-	// useEffect(() => {
-	// 	console.log("rerrender")
-	// 	setSearchFilter(initialSearch)
-	// 	setSortColumn(initialSortingState)
-	// 	setResultsPerPage(initialPaginationState.resultsPerPage)
-	// 	setCurrentPage(initialPaginationState.currentPage) // reset to first page when results per page changes
-	// }, [sortColumn, searchFilter, resultsPerPage])
-
-	const onFilter = e => setSearchFilter({value: e.currentTarget.value})
-	const checkForSorting = ({path}: OColumnPath) =>
-		sortColumn.path === path ? sortColumn.order : null
-
-	const pagination = useMemo(() => {
-		console.log(currentPage, resultsPerPage)
-		const startingIndex = (currentPage - 1) * resultsPerPage
-		const endingIndex = startingIndex + resultsPerPage
-		return listOf20MockedEmployees.filter((Employee, index) => {
-			if (index >= startingIndex && index < endingIndex) {
-				return Employee
-			}
-		})
-	}, [currentPage, resultsPerPage])
+	/**
+	 * Reset current page to 1 when results per page changes
+	 */
+	useEffect(() => {
+		setCurrentPage(initialPaginationState.currentPage)
+	}, [resultsPerPage, searchFilter])
 
 	const filteredEmployees = useMemo(() => {
-		console.log(searchFilter.value === null ||
-					searchFilter.value.trim() === "" ||
-					searchFilter.value.trim() === " " ||
-					searchFilter.value.trim().length < 3)
-		return [...pagination].filter(employee => {
-			if (
-				searchFilter.value === null ||
-				searchFilter.value.trim() === "" ||
-				searchFilter.value.trim() === " " ||
-				searchFilter.value.trim().length < 1
-			)
-				return employee
-			return (
-				employee.firstName.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-				employee.lastName.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-				employee.startingDate
-					.toDateString()
-					.toLowerCase()
-					.includes(searchFilter.value.toLowerCase()) ||
-				employee.department.toString().toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-				employee.dateOfBirth
-					.toDateString()
-					.toLowerCase()
-					.includes(searchFilter.value.toLowerCase()) ||
-				employee.street.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-				employee.city.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-				employee.zipCode.toLowerCase().includes(searchFilter.value.toLowerCase())
-			)
-		})
+		let normalizedInput = searchFilter.value ? searchFilter.value.toLowerCase().trim() : null
+		if (
+			!normalizedInput ||
+			normalizedInput === "" ||
+			normalizedInput === " " ||
+			normalizedInput.length < 1
+		)
+			return listOf20MockedEmployees
+
+		return [...listOf20MockedEmployees].filter(
+			({city, department, firstName, lastName, street, zipCode, startingDate, dateOfBirth}) =>
+				firstName.toLowerCase().includes(normalizedInput) ||
+				lastName.toLowerCase().includes(normalizedInput) ||
+				startingDate.toDateString().toLowerCase().includes(normalizedInput) ||
+				department.toString().toLowerCase().includes(normalizedInput) ||
+				dateOfBirth.toDateString().toLowerCase().includes(normalizedInput) ||
+				street.toLowerCase().includes(normalizedInput) ||
+				city.toLowerCase().includes(normalizedInput) ||
+				zipCode.toLowerCase().includes(normalizedInput)
+		)
 	}, [searchFilter])
 
 	const sortedEmployees = useMemo(() => {
@@ -155,6 +117,50 @@ export function TeamMembers() {
 			return 0
 		})
 	}, [sortColumn, searchFilter])
+
+	const visibleResults = useMemo(() => {
+		const startingIndex = (currentPage - 1) * resultsPerPage
+		const endingIndex = startingIndex + resultsPerPage
+		return sortedEmployees.filter((Employee, index) => {
+			if (index >= startingIndex && index < endingIndex) {
+				return Employee
+			}
+		})
+	}, [currentPage, resultsPerPage])
+
+	return {
+		onFilter,
+		onSort,
+		isSorting,
+		onSelectNumberOfResults,
+		listOfPages,
+		visibleResults,
+		sortedEmployees,
+		resultsOptions,
+		resultsPerPage,
+		currentPage,
+		setCurrentPage,
+		searchFilter,
+		numberOfPages,
+	}
+}
+
+export function TeamMembers() {
+	const {
+		onFilter,
+		onSort,
+		isSorting,
+		onSelectNumberOfResults,
+		listOfPages,
+		visibleResults,
+		sortedEmployees,
+		resultsOptions,
+		resultsPerPage,
+		currentPage,
+		setCurrentPage,
+		searchFilter,
+		numberOfPages,
+	} = useTeamMembers()
 
 	return (
 		<PageTemplate activeRoute={"Team Members"}>
@@ -185,56 +191,56 @@ export function TeamMembers() {
 						<thead>
 							<tr>
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "firstName"})}
+									isSorting={isSorting({path: "firstName"})}
 									label={"First Name"}
 									handleClick={() => onSort({path: "firstName"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "lastName"})}
+									isSorting={isSorting({path: "lastName"})}
 									label={"Last Name"}
 									handleClick={() => onSort({path: "lastName"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "startingDate"})}
+									isSorting={isSorting({path: "startingDate"})}
 									label={"Start Date"}
 									handleClick={() => onSort({path: "startingDate"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "department"})}
+									isSorting={isSorting({path: "department"})}
 									label={"Department"}
 									handleClick={() => onSort({path: "department"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "dateOfBirth"})}
+									isSorting={isSorting({path: "dateOfBirth"})}
 									label={"Date of Birth"}
 									handleClick={() => onSort({path: "dateOfBirth"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "street"})}
+									isSorting={isSorting({path: "street"})}
 									label={"Street"}
 									handleClick={() => onSort({path: "street"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "city"})}
+									isSorting={isSorting({path: "city"})}
 									label={"City"}
 									handleClick={() => onSort({path: "city"})}
 								/>
 
 								<ColumnHeadCell
-									sortState={checkForSorting({path: "zipCode"})}
+									isSorting={isSorting({path: "zipCode"})}
 									label={"Zip Code"}
 									handleClick={() => onSort({path: "zipCode"})}
 								/>
 							</tr>
 						</thead>
 						<tbody>
-							{sortedEmployees.map(
+							{visibleResults.map(
 								({
 									city,
 									department,
@@ -261,16 +267,18 @@ export function TeamMembers() {
 					</table>
 				</main>
 				<footer>
-					<p>Number of results : {listOf20MockedEmployees.length}</p>
+					<p>Number of results : {sortedEmployees.length}</p>
 					<p>Current Page : {currentPage}</p>
 					<PaginationButton
 						label={"Previous"}
+						disabled={currentPage === 1}
 						handlePagination={e =>
 							setCurrentPage(current => (current === 1 ? 1 : current - 1))
 						}
 					/>
 					{listOfPages.map(i => (
 						<PaginationButton
+							key={crypto.randomUUID()}
 							label={i.toString()}
 							isActive={i === currentPage}
 							handlePagination={e => setCurrentPage(i)}
@@ -278,6 +286,7 @@ export function TeamMembers() {
 					))}
 					<PaginationButton
 						label={"Next"}
+						disabled={currentPage === numberOfPages}
 						handlePagination={e =>
 							setCurrentPage(current =>
 								current === numberOfPages ? numberOfPages : current + 1

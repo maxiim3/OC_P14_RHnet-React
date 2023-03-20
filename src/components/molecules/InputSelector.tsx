@@ -24,6 +24,7 @@ export function InputSelector({
 				id={slug}
 				name={slug}
 				onChange={handleSelection}
+				defaultValue={label && parseInt(label) !== NaN ? defaultValue === parseInt(label) : undefined}
 				placeholder={"State"}>
 				{options.map(({label, slug}) => (
 					<Option

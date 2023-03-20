@@ -50,3 +50,6 @@ export type OEmployee = {
 	city: string
 	zipCode: string
 }
+export type OInputSearchValue = {
+	value: string | null
+}

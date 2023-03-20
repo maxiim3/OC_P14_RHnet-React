@@ -5,13 +5,13 @@ import React from "react"
 export const ColumnHeadCell = ({
 								   label,
 								   handleClick,
-								   sortState,
-							   }: OLabel & {sortState: null | "asc" | "desc"; handleClick?: (e: OClick) => void}) => {
+								   isSorting,
+							   }: OLabel & {isSorting: null | "asc" | "desc"; handleClick?: (e: OClick) => void}) => {
 	return (
-		<th aria-sort={sortState ? (sortState === "asc" ? "ascending" : "descending") : "none"}>
+		<th aria-sort={isSorting ? (isSorting === "asc" ? "ascending" : "descending") : "none"}>
 			<button
 				className={"sort-btn"}
-				data-state={sortState}
+				data-state={isSorting}
 				onClick={handleClick}>
 				<label>{label}</label>
 				<span className={"sort-btn__icon"}>
