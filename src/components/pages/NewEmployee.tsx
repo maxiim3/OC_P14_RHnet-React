@@ -1,11 +1,11 @@
 import React from "react"
-import PageTemplate from "../templates/PageTemplate"
+import PageTemplateComposition from "../templates/PageTemplateComposition"
 import {CreateEmployeeForm} from "../organisms/CreateEmployeeForm"
 
 export function NewEmployee() {
 	return (
-		<PageTemplate activeRoute={"Create Employee"}>
-			<CreateEmployeeForm/>
-		</PageTemplate>
+		<PageTemplateComposition activeRoute={"Create Employee"}>
+			<CreateEmployeeForm />
+		</PageTemplateComposition>
 	)
 }

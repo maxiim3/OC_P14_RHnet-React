@@ -295,7 +295,7 @@ input {
 	//width: 100vw;
 	//height: 100vh;
 	background: $clr-primary-0;
-
+	overflow-x: scroll;
 	&__h1 {
 		text-align: center;
 		margin-inline: auto;

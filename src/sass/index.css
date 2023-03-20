@@ -169,6 +169,7 @@ input {
 
 .main {
   background: #fbfbf6;
+  overflow-x: scroll;
 }
 .main__h1 {
   text-align: center;

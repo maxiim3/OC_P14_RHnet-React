@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
-import PageTemplate from "../templates/PageTemplate"
+import PageTemplateComposition from "../templates/PageTemplateComposition"
 import {InputSelector} from "../molecules/InputSelector"
-import {InputTextBox} from "../molecules/InputTextBox"
+import {InputTextBoxComposition} from "../molecules/input.text-box.composition"
 import {ColumnHeadCell} from "../molecules/ColumnHeadCell"
 import {OColumnPath, OInputSearchValue, OSortingOrder} from "../../types"
 import {listOf20MockedEmployees} from "../../ListOf20MockedEmployees"
@@ -163,7 +163,7 @@ export function TeamMembers() {
 	} = useTeamMembers()
 
 	return (
-		<PageTemplate activeRoute={"Team Members"}>
+		<PageTemplateComposition activeRoute={"Team Members"}>
 			<section>
 				<header>
 					<div className="number-of-results">
@@ -177,7 +177,7 @@ export function TeamMembers() {
 						/>
 					</div>
 					<div className="filter">
-						<InputTextBox
+						<InputTextBoxComposition
 							value={searchFilter.value}
 							slug={"filter"}
 							description={""}
@@ -295,6 +295,6 @@ export function TeamMembers() {
 					/>
 				</footer>
 			</section>
-		</PageTemplate>
+		</PageTemplateComposition>
 	)
 }

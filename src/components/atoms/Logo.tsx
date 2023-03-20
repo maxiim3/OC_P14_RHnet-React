@@ -4,6 +4,7 @@ export const Logo = () => {
 	return (
 		<svg
 			className={"logo"}
+			id={"logo"}
 			width="153"
 			height="153"
 			viewBox="0 0 153 153"

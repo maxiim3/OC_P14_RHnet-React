@@ -1,8 +1,8 @@
-import {OChildren, ODescription, OLabel, OOptions, OSlug} from "../../types"
-import {Label} from "../atoms/Label"
-import {Option} from "../atoms/Option"
+import {ODescription, OLabel, OOptions, OSlug} from "../../types"
 import React, {ReactEventHandler} from "react"
-import {InputWrapper} from "../atoms/InputWrapper"
+import {InputContainerStyled} from "../atoms/input.container.styled"
+import {InputLabelStyled} from "../atoms/input.label.styled"
+import {OptionStyled} from "../atoms/select.option.styled"
 
 export function InputSelector({
 	slug,
@@ -16,24 +16,27 @@ export function InputSelector({
 	ODescription &
 	OOptions & {handleSelection?: ReactEventHandler<HTMLSelectElement>; defaultValue?: number}) {
 	return (
-		<InputWrapper>
-			<Label {...{slug, label}} />
+		<InputContainerStyled>
+			<InputLabelStyled htmlFor={slug}>{label}</InputLabelStyled>
 			<select
 				aria-description={description}
 				className={"input-box input-box--select"}
 				id={slug}
 				name={slug}
 				onChange={handleSelection}
-				defaultValue={label && parseInt(label) !== NaN ? defaultValue === parseInt(label) : undefined}
+				defaultValue={
+					label && parseInt(label) !== NaN ? defaultValue === parseInt(label) : undefined
+				}
 				placeholder={"State"}>
 				{options.map(({label, slug}) => (
-					<Option
+					<OptionStyled
 						key={crypto.randomUUID()}
-						{...{slug, label, defaultValue}}
-					/>
+						aria-description={label}
+						value={slug || label}>
+						{label}
+					</OptionStyled>
 				))}
 			</select>
-		</InputWrapper>
+		</InputContainerStyled>
 	)
 }
-

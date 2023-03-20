@@ -1,11 +1,13 @@
 import React, {MutableRefObject, useRef} from "react"
 import statesOptions from "../../statesOption"
 import departmentOptions from "../../departmentOptions"
-import {PrimaryButton} from "../atoms/PrimaryButton"
-import {InputTextBox} from "../molecules/InputTextBox"
-import {InputDatePicker} from "../molecules/InputDatePicker"
+import {InputTextBoxComposition} from "../molecules/input.text-box.composition"
 import {InputSelector} from "../molecules/InputSelector"
 import {AiFillCloseCircle, GiPartyPopper} from "react-icons/all"
+import {ButtonPrimaryStyled} from "../atoms/button.primary.styled"
+import {InputDatePicker} from "../molecules/InputDatePicker"
+import {FormFieldsetStyled} from "../atoms/form.fieldset.styled"
+import {FormLegendStyled} from "../atoms/form.legend.styled"
 
 export function CreateEmployeeForm() {
 	const modalRef = useRef() as MutableRefObject<HTMLDialogElement>
@@ -13,27 +15,47 @@ export function CreateEmployeeForm() {
 	return (
 		<>
 			<form>
-				<InputTextBox {...{slug: "firstName", description: "", label: "First Name"}} />
-				<InputTextBox {...{slug: "lastName", description: "", label: "Last Name"}} />
+				<InputTextBoxComposition
+					slug="firstName"
+					description=""
+					label="First Name"
+				/>
+				<InputTextBoxComposition
+					slug="lastName"
+					description=""
+					label="Last Name"
+				/>
 				<InputDatePicker
 					{...{slug: "dateOfBirth", description: "", label: "Date of Birth"}}
 				/>
-				<InputDatePicker
-					{...{slug: "startingDate", description: "", label: "Starting Date"}}
-				/>
 
-				<fieldset>
-					<legend>Address</legend>
-					<InputTextBox {...{slug: "street", description: "", label: "Street"}} />
-					<InputTextBox {...{slug: "city", description: "", label: "City"}} />
+				<FormFieldsetStyled>
+					<FormLegendStyled>Address</FormLegendStyled>
+					<InputTextBoxComposition
+						slug="street"
+						description=""
+						label="Street"
+					/>
+					<InputTextBoxComposition
+						slug="city"
+						description=""
+						label="City"
+					/>
 					<InputSelector
 						slug={"state"}
 						description={""}
 						label={"State"}
 						options={[...statesOptions]}
 					/>
-					<InputTextBox {...{slug: "zipCode", description: "", label: "Zip Code"}} />
-				</fieldset>
+					<InputTextBoxComposition
+						slug="zipCode"
+						description=""
+						label="Zip Code"
+					/>
+				</FormFieldsetStyled>
+				<InputDatePicker
+					{...{slug: "startingDate", description: "", label: "Starting Date"}}
+				/>
 				<InputSelector
 					slug={"department"}
 					description={""}
@@ -41,14 +63,14 @@ export function CreateEmployeeForm() {
 					options={[...departmentOptions]}
 				/>
 				<div className="btn-wrapper">
-					<PrimaryButton
-						handleClick={e => {
+					<ButtonPrimaryStyled
+						onClick={e => {
 							e.preventDefault()
 							modalRef.current.showModal()
 							console.log("clicked")
-						}}
-						label={"Submit"}
-					/>
+						}}>
+						Submit
+					</ButtonPrimaryStyled>
 				</div>
 			</form>
 			<dialog

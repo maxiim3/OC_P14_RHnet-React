@@ -1,23 +1,28 @@
 import {ODescription, OLabel, OSlug} from "../../types"
-import React from "react"
+import React, {ReactEventHandler} from "react"
 import {InputContainerStyled} from "../atoms/input.container.styled"
+import {InputTextStyled} from "../atoms/input.text.styled"
 import {InputLabelStyled} from "../atoms/input.label.styled"
 
-export function InputDatePicker({slug, label, description}: OSlug & OLabel & ODescription) {
-	/*is Starting date or date, for autocompletion*/
-	let autocompletion = slug === "startingDate" ? "startingDate" : "date"
-	/* todo Add validation*/
-
+export function InputTextBoxComposition({
+	slug,
+	label,
+	description,
+	onChange,
+}: OSlug &
+	OLabel &
+	ODescription & {onChange?: ReactEventHandler<HTMLInputElement>}) {
 	return (
 		<InputContainerStyled>
 			<InputLabelStyled htmlFor={slug}>{label}</InputLabelStyled>
-			<input
+			<InputTextStyled
 				aria-description={description}
-				autoComplete={autocompletion}
-				className={"input-box input-box--date"}
-				type="date"
+				autoComplete={slug}
+				onChange={onChange}
+				type="text"
 				id={slug}
 				name={slug}
+				placeholder={label}
 			/>
 		</InputContainerStyled>
 	)

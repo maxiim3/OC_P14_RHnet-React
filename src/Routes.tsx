@@ -1,18 +1,18 @@
 import {createBrowserRouter, createRoutesFromElements, Outlet, Route} from "react-router-dom"
-import Header from "./components/organisms/Header"
-import Footer from "./components/organisms/Footer"
+import {FooterComposition} from "./components/molecules/Footer"
 import {NewEmployee} from "./components/pages/NewEmployee"
 import {TeamMembers} from "./components/pages/TeamMembers"
 import React from "react"
+import {HeaderBannerComposition} from "./components/organisms/header-banner.composition"
 
 export const Routes = createBrowserRouter(
 	createRoutesFromElements(
 		<Route
 			element={
 				<>
-					<Header />
-					<Outlet/>
-					<Footer />
+					<HeaderBannerComposition />
+					<Outlet />
+					<FooterComposition />
 				</>
 			}>
 			<Route index />
