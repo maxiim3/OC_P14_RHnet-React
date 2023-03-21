@@ -3,14 +3,14 @@ import {FooterComposition} from "./components/molecules/Footer"
 import {NewEmployee} from "./components/pages/NewEmployee"
 import {TeamMembers} from "./components/pages/TeamMembers"
 import React from "react"
-import {HeaderBannerComposition} from "./components/organisms/header-banner.composition"
+import {HeaderBanner} from "./components/organisms/HeaderBanner"
 
 export const Routes = createBrowserRouter(
 	createRoutesFromElements(
 		<Route
 			element={
 				<>
-					<HeaderBannerComposition />
+					<HeaderBanner />
 					<Outlet />
 					<FooterComposition />
 				</>

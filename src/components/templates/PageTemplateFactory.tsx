@@ -4,7 +4,7 @@ import {MainContainerStyled} from "../atoms/main.container.styled"
 import {Heading1Styled} from "../atoms/heading1.styled"
 import {Header2Styled} from "../atoms/heading2.styled"
 
-const PageTemplateComposition = ({children, activeRoute}: OChildren & {activeRoute: string}) => {
+const PageTemplateFactory = ({children, activeRoute}: OChildren & {activeRoute: string}) => {
 	return (
 		<MainContainerStyled className={"main"}>
 			<Heading1Styled>HRnet</Heading1Styled>
@@ -14,4 +14,4 @@ const PageTemplateComposition = ({children, activeRoute}: OChildren & {activeRou
 	)
 }
 
-export default PageTemplateComposition
+export default PageTemplateFactory

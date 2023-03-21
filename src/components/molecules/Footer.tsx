@@ -17,7 +17,7 @@ const FooterContainerStyled = styled.footer`
 
 export const FooterComposition = () => {
 	return (
-		<FooterContainerStyled className={"footer"}>
+		<FooterContainerStyled>
 			<p>
 				Edit <code>src/App.tsx</code> and save to test HMR
 			</p>

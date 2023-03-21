@@ -4,7 +4,7 @@ import {InputContainerStyled} from "../atoms/input.container.styled"
 import {InputTextStyled} from "../atoms/input.text.styled"
 import {InputLabelStyled} from "../atoms/input.label.styled"
 
-export function InputTextBoxComposition({
+export function InputTextFactory({
 	slug,
 	label,
 	description,

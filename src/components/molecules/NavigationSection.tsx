@@ -1,6 +1,6 @@
 import {HeaderNavContainerStyled} from "../atoms/header.nav.container.styled"
 import {HeaderNavLinksContainerStyled} from "../atoms/header.nav.links-container.styled"
-import {NavigationLinkElement} from "./navigation.link.element"
+import {NavLinkItem} from "./NavLinkItem"
 import Path from "../../config.path"
 import {MdOutlineAddCircle, RiTeamFill} from "react-icons/all"
 import React from "react"
@@ -9,13 +9,13 @@ export function NavigationSection() {
 	return (
 		<HeaderNavContainerStyled>
 			<HeaderNavLinksContainerStyled>
-				<NavigationLinkElement
+				<NavLinkItem
 					path={Path.newEmployee}
 					icon={<MdOutlineAddCircle />}
 					label={"New Member"}
 					description={"Navigate to new member page"}
 				/>
-				<NavigationLinkElement
+				<NavLinkItem
 					path={Path.employeeList}
 					icon={<RiTeamFill />}
 					label={"Team Members"}

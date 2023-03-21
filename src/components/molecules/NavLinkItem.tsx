@@ -4,7 +4,7 @@ import {HeaderNavLinkIconStyled} from "../atoms/header.nav-link.icon.styled"
 import {PageLinkAnchor} from "../atoms/header.nav-link.anchor.styled"
 import React from "react"
 
-export const NavigationLinkElement = ({
+export const NavLinkItem = ({
 	label,
 	icon,
 	description,

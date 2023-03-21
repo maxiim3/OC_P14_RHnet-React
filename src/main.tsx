@@ -4,7 +4,7 @@ import "./sass/index.scss"
 import {css, ThemeProvider} from "styled-components"
 import Footer, {FooterComposition} from "./components/molecules/Footer"
 import {NewEmployee} from "./components/pages/NewEmployee"
-import {HeaderBannerComposition} from "./components/organisms/header-banner.composition"
+import {HeaderBanner} from "./components/organisms/HeaderBanner"
 
 const convertHexToRGB = (hex: string) => {
 	const r = parseInt(hex.slice(1, 3), 16)
@@ -75,7 +75,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
 		<ProvideThemeContext>
 			<ProvideTheme>
-				<HeaderBannerComposition />
+				<HeaderBanner />
 				<NewEmployee />
 				<FooterComposition />
 			</ProvideTheme>
