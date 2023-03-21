@@ -9,5 +9,5 @@ export const InputContainerStyled = styled.div`
   padding: 6px 8px;
   margin-inline: auto;
   gap: 4px;
-  
+  position: relative;
 	`

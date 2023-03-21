@@ -3,6 +3,24 @@ import React, {ReactEventHandler} from "react"
 import {InputContainerStyled} from "../atoms/input.container.styled"
 import {InputLabelStyled} from "../atoms/input.label.styled"
 import {OptionStyled} from "../atoms/select.option.styled"
+import styled from "styled-components"
+import {typography} from "../../styles/constants.styled"
+import {OThemeProps} from "../../main"
+
+const SelectStyled = styled.select`
+	font-family: ${typography.secondary};
+	position: relative;
+	width: 100%;
+	padding: 12px 12px;
+	border-radius: 4px;
+	color: ${({theme}: OThemeProps) => theme.txt.rgb};
+	background: ${({theme}: OThemeProps) => theme.bg.rgb};
+	border: 1px solid ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
+
+	&::placeholder {
+		color: ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
+	}
+`
 
 export function InputSelector({
 	slug,
@@ -18,9 +36,8 @@ export function InputSelector({
 	return (
 		<InputContainerStyled>
 			<InputLabelStyled htmlFor={slug}>{label}</InputLabelStyled>
-			<select
+			<SelectStyled
 				aria-description={description}
-				className={"input-box input-box--select"}
 				id={slug}
 				name={slug}
 				onChange={handleSelection}
@@ -36,7 +53,7 @@ export function InputSelector({
 						{label}
 					</OptionStyled>
 				))}
-			</select>
+			</SelectStyled>
 		</InputContainerStyled>
 	)
 }

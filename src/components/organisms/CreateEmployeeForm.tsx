@@ -12,17 +12,21 @@ import {CityInput} from "../molecules/CityInput"
 import {StreetInput} from "../molecules/StreetInput"
 import {DateOfBirthInput} from "../molecules/DateOfBirthInput"
 import {useModalWithPortal} from "../../hooks/useModalWithPortal"
+import {DatePickerConsumer} from "./date-picker/DatePickerConsumer"
+import {DatePicker} from "./date-picker/DatePicker"
+
 
 export function CreateEmployeeForm() {
 	const {AppendModalToBody, appendModal} = useModalWithPortal()
 
-	/*todo maybe place all related input into a single file or directory ?*/
+	/*TODO récupérer toutes les valeurs dans la console on submit*/
 	return (
 		<>
 			<form>
 				<FirstNameInput />
 				<LastNameInput />
 				<DateOfBirthInput />
+				<DatePicker label={"Date of birth"}/>
 				<FormFieldsetStyled>
 					<FormLegendStyled>Address</FormLegendStyled>
 					<StreetInput />
