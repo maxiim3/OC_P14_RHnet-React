@@ -1,6 +1,6 @@
 import {useCallback, useReducer, useState} from "react"
-import {OActions, OActionsPayload, ODate} from "./types"
-import {today} from "./today"
+import {OActions, OActionsPayload, ODate} from "../types"
+import {today} from "../context/today"
 
 export const useDateContextApi = () => {
 	const [currentDate, dispatchDate] = useReducer((previousDate: ODate, action: OActions) => {
@@ -53,6 +53,8 @@ export const useDateContextApi = () => {
 	const [isSet, setIsSet] = useState(false)
 
 	const getDaysInMonth = useCallback((month: number, year: number) => {
+		//  date: 0 is the last day of the previous month
+		// we have to add one to get the current month
 		const actualMonth = month + 1 // because month is 0 indexed
 		return new Date(year, actualMonth, 0).getDate() // returns the last day of the month
 	}, [])

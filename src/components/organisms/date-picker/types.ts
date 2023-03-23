@@ -1,5 +1,5 @@
-import {useDateContextApi} from "./useDateContextApi"
-import {MouseEvent, ReactNode} from "react"
+import {useDateContextApi} from "./hooks/useDateContextApi"
+import {MouseEvent, MouseEventHandler, ReactNode} from "react"
 
 export type ODate = {
 	date: Date
@@ -74,4 +74,9 @@ export type OEmployee = {
 }
 export type OInputSearchValue = {
 	value: string | null
+}
+export type OInputDateProps = {
+	label: string
+	onSetDate: MouseEventHandler<HTMLDivElement>
+	value: string
 }

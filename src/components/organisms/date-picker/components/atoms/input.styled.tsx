@@ -1,9 +1,8 @@
 import styled from "styled-components"
-import {InputTextStyled} from "../../atoms/input.text.styled"
-import {OThemeProps} from "../../../main"
-import {typography} from "../../../styles/constants.styled"
+import {OThemeProps} from "../../../../../main"
+import {typography} from "../../../../../styles/constants.styled"
 
-export const InputDateStyled = styled.div`
+export const InputStyled = styled.div`
   font-family: ${typography.secondary};
 	position: relative;
 	width: 100%;
@@ -21,3 +20,4 @@ export const InputDateStyled = styled.div`
 		cursor: pointer;
 	}
 `
+

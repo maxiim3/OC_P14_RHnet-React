@@ -1,6 +1,6 @@
-import {DateContext} from "./date.context"
+import {DateContext} from "../context/date.context"
 import {useContext} from "react"
-import {ODateContext} from "./types"
+import {ODateContext} from "../types"
 
 export const useDateContext = () => {
 	const context: ODateContext = useContext(DateContext)

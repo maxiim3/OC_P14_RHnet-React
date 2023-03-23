@@ -1,12 +1,17 @@
 import {OLabel} from "./types"
-import {ProvideDateContext} from "./ProvideDateContext"
+import {ContextProvider} from "./components/molecules/ContextProvider"
 import React from "react"
-import {DatePickerConsumer} from "./DatePickerConsumer"
+import {DatePickerComponent} from "./components/organisms/DatePickerComponent"
+
+
+// todo refactoriser avec un store
+// todo extract the component into another project
+// todo recommencer et Documenter le projet
 
 export function DatePicker(props: OLabel) {
 	return (
-		<ProvideDateContext aria-label={"container"}>
-			<DatePickerConsumer {...props} />
-		</ProvideDateContext>
+		<ContextProvider aria-label={"container"}>
+			<DatePickerComponent {...props} />
+		</ContextProvider>
 	)
 }

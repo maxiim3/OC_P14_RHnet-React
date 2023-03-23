@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import "./sass/index.scss"
 import {css, ThemeProvider} from "styled-components"
 import Footer, {FooterComposition} from "./components/molecules/Footer"
+
 import {NewEmployee} from "./components/pages/NewEmployee"
 import {HeaderBanner} from "./components/organisms/HeaderBanner"
 
@@ -76,6 +77,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 		<ProvideThemeContext>
 			<ProvideTheme>
 				<HeaderBanner />
+
 				<NewEmployee />
 				<FooterComposition />
 			</ProvideTheme>
