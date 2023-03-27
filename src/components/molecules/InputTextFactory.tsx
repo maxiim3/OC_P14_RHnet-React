@@ -1,4 +1,4 @@
-import {ODescription, OLabel, OSlug} from "../../types"
+import {ODescription, OLabel, OSlug} from "../../misc/types"
 import React, {ReactEventHandler} from "react"
 import {InputContainerStyled} from "../atoms/input.container.styled"
 import {InputTextStyled} from "../atoms/input.text.styled"

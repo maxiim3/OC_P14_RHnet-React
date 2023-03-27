@@ -1,11 +1,10 @@
-import {ODescription, OLabel, OOptions, OSlug} from "../../types"
+import {ODescription, OLabel, OOptions, OSlug} from "../../misc/types"
 import React, {ReactEventHandler} from "react"
 import {InputContainerStyled} from "../atoms/input.container.styled"
 import {InputLabelStyled} from "../atoms/input.label.styled"
-import {OptionStyled} from "../atoms/select.option.styled"
 import styled from "styled-components"
 import {typography} from "../../styles/constants.styled"
-import {OThemeProps} from "../../main"
+import {OThemeProps} from "../../app/layouts/WrapperProvider"
 
 const SelectStyled = styled.select`
 	font-family: ${typography.secondary};
@@ -21,6 +20,10 @@ const SelectStyled = styled.select`
 		color: ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
 	}
 `
+
+export const OptionStyled = styled.option`
+	
+	`
 
 export function InputSelector({
 	slug,
