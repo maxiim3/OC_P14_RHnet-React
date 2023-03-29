@@ -1,4 +1,4 @@
-import {OChildren} from "../../misc/types"
+import {OChildren} from "../misc/types"
 import React from "react"
 import styled from "styled-components"
 

@@ -11,7 +11,7 @@ import statesOptions from "../../misc/statesOption"
 import departmentOptions from "../../misc/departmentOptions"
 import {createPortal} from "react-dom"
 import {AiFillCloseCircle, GiPartyPopper} from "react-icons/all"
-import {DateInputConstants, FormInputContext} from "../../app/pages/NewEmployeePage"
+import {DateInputConstants, FormInputContext} from "../../pages/NewEmployeePage"
 //endregion
 
 //region Hook

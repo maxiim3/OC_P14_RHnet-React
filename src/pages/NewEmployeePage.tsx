@@ -1,7 +1,7 @@
 import React, {createContext, useCallback, useEffect, useReducer} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
-import {NewEmployeeForm} from "../../components/organisms/NewEmployeeForm"
-import {OChildren} from "../../misc/types"
+import {NewEmployeeForm} from "../components/organisms/NewEmployeeForm"
+import {OChildren} from "../misc/types"
 //region context
 //region Date Constant
 /**
@@ -148,7 +148,7 @@ export function NewEmployeePage() {
 	return (
 		<PageTemplateFactory activeRoute={"Create Employee"}>
 			<FormContextProvider>
-				<NewEmployeeForm />{" "}
+				<NewEmployeeForm />
 			</FormContextProvider>
 		</PageTemplateFactory>
 	)

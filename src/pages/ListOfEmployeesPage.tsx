@@ -1,10 +1,10 @@
 //region imports
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
-import {InputSelector} from "../../components/molecules/InputSelector"
-import {InputTextFactory} from "../../components/molecules/InputTextFactory"
-import {OClick, OColumnPath, OInputSearchValue, OLabel, OSortingOrder} from "../../misc/types"
-import {listOf20MockedEmployees} from "../../misc/ListOf20MockedEmployees"
+import {InputSelector} from "../components/molecules/InputSelector"
+import {InputTextFactory} from "../components/molecules/InputTextFactory"
+import {OClick, OColumnPath, OInputSearchValue, OLabel, OSortingOrder} from "../misc/types"
+import {listOf20MockedEmployees} from "../misc/ListOf20MockedEmployees"
 import {BsTriangleFill} from "react-icons/all"
 //endregion
 

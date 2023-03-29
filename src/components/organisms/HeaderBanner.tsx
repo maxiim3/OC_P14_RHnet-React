@@ -1,12 +1,18 @@
 import React from "react"
 import styled from "styled-components"
-import {OThemeProps, useThemeProvider} from "../../app/layouts/WrapperProvider"
-import {BsFillMoonStarsFill, FiSun, MdOutlineAddCircle, RiTeamFill} from "react-icons/all"
+import {OThemeProps, useThemeProvider} from "../../layouts/WrapperProvider"
+import {
+	AiFillHome,
+	BsFillMoonStarsFill,
+	FiSun,
+	MdOutlineAddCircle,
+	RiTeamFill,
+} from "react-icons/all"
 import {screens} from "../../styles/constants.styled"
 import {Logo} from "../atoms/Logo"
 import {NavLink} from "react-router-dom"
-import {ODescription, OIcon, OLabel, OPath} from "../../misc/types"
 import Path from "../../misc/config.path"
+import {NavLinkItem} from "../molecules/NavLinkItem"
 
 //region atoms
 export const Button = styled.button`
@@ -138,30 +144,16 @@ export function LogoBlock() {
 	)
 }
 
-export const NavLinkItem = ({
-	label,
-	icon,
-	description,
-	path,
-}: OLabel & OIcon & ODescription & OPath) => {
-	return (
-		<ListItem tabIndex={-1}>
-			<Icon tabIndex={-1}>{icon}</Icon>
-			<Link
-				tabIndex={0}
-				aria-label={label}
-				aria-description={description}
-				to={path}>
-				{label}
-			</Link>
-		</ListItem>
-	)
-}
-
 export function Navigation() {
 	return (
 		<Nav>
 			<UnorderedList>
+				<NavLinkItem
+					path={Path.root}
+					icon={<AiFillHome />}
+					label={"Home"}
+					description={"Navigate to home page"}
+				/>
 				<NavLinkItem
 					path={Path.newEmployee}
 					icon={<MdOutlineAddCircle />}

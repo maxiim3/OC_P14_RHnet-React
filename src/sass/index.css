@@ -168,8 +168,8 @@ input {
 }
 
 .main {
-  background: #fbfbf6;
   overflow-x: scroll;
+  background: #fbfbf6;
 }
 .main__h1 {
   text-align: center;

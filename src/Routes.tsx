@@ -4,6 +4,9 @@ import {ListOfEmployeesPage} from "./pages/ListOfEmployeesPage"
 import React from "react"
 import {ErrorPage} from "./pages/ErrorPage"
 import {PageLayout} from "./layouts/PageLayout"
+import {HomePage} from "./pages/HomePage"
+
+const API_URL = "http://127.0.0.1:5173/api/employees.json"
 
 export const Routes = createBrowserRouter(
 	createRoutesFromElements(
@@ -12,7 +15,7 @@ export const Routes = createBrowserRouter(
 			errorElement={<Navigate to={"/error404"} />}>
 			<Route
 				index
-				element={<Navigate to={"/employees"} />}
+				element={<HomePage />}
 			/>
 			<Route
 				path={"/new-employee"}

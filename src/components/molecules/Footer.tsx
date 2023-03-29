@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import {OThemeProps} from "../../app/layouts/WrapperProvider"
+import {OThemeProps} from "../../layouts/WrapperProvider"
 
 const FooterContainerStyled = styled.footer`
 	background: ${({theme}: OThemeProps) => theme.txt.rgba(0.8)};

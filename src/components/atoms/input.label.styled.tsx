@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import {typography} from "../../styles/constants.styled"
-import {OThemeProps} from "../../app/layouts/WrapperProvider"
+import {OThemeProps} from "../../layouts/WrapperProvider"
 
 export const InputLabelStyled = styled.label`
 	font-family: ${typography.secondary};

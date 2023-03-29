@@ -4,7 +4,7 @@ import {InputContainerStyled} from "../atoms/input.container.styled"
 import {InputLabelStyled} from "../atoms/input.label.styled"
 import styled from "styled-components"
 import {typography} from "../../styles/constants.styled"
-import {OThemeProps} from "../../app/layouts/WrapperProvider"
+import {OThemeProps} from "../../layouts/WrapperProvider"
 
 const SelectStyled = styled.select`
 	font-family: ${typography.secondary};

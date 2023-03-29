@@ -294,8 +294,9 @@ input {
 .main {
 	//width: 100vw;
 	//height: 100vh;
-	background: $clr-primary-0;
 	overflow-x: scroll;
+	background: $clr-primary-0;
+
 	&__h1 {
 		text-align: center;
 		margin-inline: auto;
@@ -346,8 +347,7 @@ input {
 		color: transparent;
 		background: transparent;
 	}
-
-	}
+}
 
 .btn-wrapper {
 	display: grid;
@@ -591,6 +591,7 @@ tbody {
 		color: $clr-primary-100;
 		border: 1px solid $clr-primary-400;
 		background: $clr-primary-400;
+
 		&:hover {
 			cursor: not-allowed;
 		}
@@ -600,8 +601,10 @@ tbody {
 		color: $clr-secondary-200;
 		border: 1px solid $clr-secondary-100;
 		background: $clr-secondary-100;
+
 		&:hover {
 			cursor: not-allowed;
 		}
 	}
 }
+

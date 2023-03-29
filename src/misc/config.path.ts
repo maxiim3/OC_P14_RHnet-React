@@ -1,4 +1,5 @@
 const Path = {
+	root: "/",
 	newEmployee: "/new-employee",
 	employeeList: "/employees",
 }
