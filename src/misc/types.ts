@@ -60,3 +60,10 @@ export type OClassName = {
 export type OClickEvent = {
 	onClick: (e: OClick) => void
 }
+export type OInputSwitchProps = {
+	slug?: string
+	label: string
+	description?: string
+	type: "text" | "select" | "date"
+	options?: {label: string; slug?: string}[]
+}

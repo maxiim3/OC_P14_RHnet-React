@@ -12,37 +12,41 @@ type InputTextFactoryProps = OSlug &
 //endregion
 
 //region Styles
-const InputContainer = styled(BasedInputContainer)<OThemeProps>``
+const InputContainer = styled(BasedInputContainer)<OThemeProps>`
+	width: clamp(220px, 50vw, 625px);
+`
 const Label = styled(BasedInputLabelStyled)<OThemeProps>``
 
 const FeedBackMessage = styled.span<OThemeProps>`
-  color: ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
-  font-size: 12px;
-  margin-top: 4px;
-  display: block;
+	color: ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
+	font-size: 12px;
+	margin-top: 4px;
+	display: block;
 
-  &[data-validation="unset"] {
-    display: none;
-  }
+	&[data-validation="unset"] {
+		display: none;
+	}
 
-  &[data-validation="true"] {
-    color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
-  }
+	&[data-validation="true"] {
+		color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
+	}
 
-  &[data-validation="false"] {
-    color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
-  }
+	&[data-validation="false"] {
+		color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
+	}
 `
 const Input = styled(InputStyled)<OThemeProps>`
-  &[data-validation="true"] {
-    border-color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
-    outline-color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
-  }
+	width: 100%;
 
-  &[data-validation="false"] {
-    outline-color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
-    border-color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
-  }
+	&[data-validation="true"] {
+		border-color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
+		outline-color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};
+	}
+
+	&[data-validation="false"] {
+		outline-color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
+		border-color: ${({theme}: OThemeProps) => theme?.error?.rgb || "red"};
+	}
 `
 
 //endregion
@@ -63,7 +67,7 @@ export function InputText({slug, label, description, onChange}: InputTextFactory
 	const feedBackIsActive = useMemo(() => inputValue.length > 1, [inputValue.length])
 	const handleDataSet = useMemo(
 		() => (!feedBackIsActive ? "unset" : validInput ? "true" : "false"),
-		[feedBackIsActive, validInput],
+		[feedBackIsActive, validInput]
 	)
 	//endregion
 

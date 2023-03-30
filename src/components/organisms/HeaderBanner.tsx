@@ -12,7 +12,7 @@ import {screens} from "../../styles/constants.styled"
 import {Logo} from "../atoms/Logo"
 import {NavLink} from "react-router-dom"
 import Path from "../../misc/config.path"
-import {NavLinkItem} from "../molecules/NavLinkItem"
+import {ODescription, OIcon, OLabel, OPath} from "../../misc/types"
 
 //region atoms
 export const Button = styled.button`
@@ -32,7 +32,7 @@ export const Button = styled.button`
 		background-color: ${({theme}) => theme.txt.rgba(0.8)};
 	}
 `
-export const View = styled.header`
+export const Header = styled.header`
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -144,6 +144,26 @@ export function LogoBlock() {
 	)
 }
 
+export const NavLinkItem = ({
+	label,
+	icon,
+	description,
+	path,
+}: OLabel & OIcon & ODescription & OPath) => {
+	return (
+		<ListItem tabIndex={-1}>
+			<Icon tabIndex={-1}>{icon}</Icon>
+			<Link
+				tabIndex={0}
+				aria-label={label}
+				aria-description={description}
+				to={path}>
+				{label}
+			</Link>
+		</ListItem>
+	)
+}
+
 export function Navigation() {
 	return (
 		<Nav>
@@ -176,11 +196,11 @@ export function Navigation() {
 //region organisms
 export const HeaderBanner = () => {
 	return (
-		<View>
+		<Header>
 			<LogoBlock />
 			<Navigation />
 			<ToggleThemeButton />
-		</View>
+		</Header>
 	)
 }
 //endregion

@@ -1,7 +1,9 @@
 import React, {createContext, useCallback, useEffect, useReducer} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
 import {NewEmployeeForm} from "../components/organisms/NewEmployeeForm"
-import {OChildren} from "../misc/types"
+import {OChildren, OInputSwitchProps} from "../misc/types"
+import statesOptions from "../misc/statesOption"
+import departmentOptions from "../misc/departmentOptions"
 //region context
 //region Date Constant
 /**
@@ -17,6 +19,73 @@ export const DateInputConstants = {
 		id: "starting-date",
 		name: "Starting date",
 	},
+}
+
+export const inputFields: {
+	name: OInputSwitchProps[]
+	address: OInputSwitchProps[]
+	job: OInputSwitchProps[]
+} = {
+	name: [
+		{
+			slug: "firstName",
+			label: "First Name",
+			description: "",
+			type: "text",
+		},
+		{
+			slug: "lastName",
+			label: "Last Name",
+			description: "",
+			type: "text",
+		},
+		{
+			label: DateInputConstants.dateOfBirth.name,
+			slug: DateInputConstants.dateOfBirth.id,
+			type: "date",
+		},
+	],
+	address: [
+		{
+			slug: "street",
+			label: "Street",
+			description: "",
+			type: "text",
+		},
+		{
+			slug: "city",
+			label: "City",
+			description: "",
+			type: "text",
+		},
+		{
+			slug: "state",
+			label: "State",
+			description: "",
+			type: "select",
+			options: statesOptions,
+		},
+		{
+			slug: "zipCode",
+			label: "Zip Code",
+			description: "",
+			type: "text",
+		},
+	],
+	job: [
+		{
+			label: DateInputConstants.startingDate.name,
+			slug: DateInputConstants.startingDate.id,
+			type: "date",
+		},
+		{
+			slug: "department",
+			label: "Department",
+			description: "",
+			type: "select",
+			options: departmentOptions,
+		},
+	],
 }
 //endregion
 
@@ -153,3 +222,5 @@ export function NewEmployeePage() {
 		</PageTemplateFactory>
 	)
 }
+
+//region organisms

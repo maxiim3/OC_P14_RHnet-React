@@ -3,7 +3,7 @@ import React, {ReactEventHandler, useEffect, useMemo, useState} from "react"
 import {BasedInputContainer} from "../atoms/based-input-container.styled"
 import {BasedInputLabelStyled} from "../atoms/based-input-label.styled"
 import styled from "styled-components"
-import {typography} from "../../styles/constants.styled"
+import {screens, typography} from "../../styles/constants.styled"
 import {OThemeProps} from "../../layouts/WrapperProvider"
 import {InputStyled} from "../atoms/input.styled"
 
@@ -12,6 +12,9 @@ const Select = styled.select<OThemeProps>`
 	position: relative;
 	width: 100%;
 	padding: 12px 12px;
+
+	@media (min-width: ${screens.screen200}) {
+	}
 	border-radius: 4px;
 	color: ${({theme}: OThemeProps) => theme.txt.rgb};
 	background: ${({theme}: OThemeProps) => theme.bg.rgb};
@@ -125,7 +128,6 @@ export function InputSelector({
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		e.preventDefault()
 		const option = e.currentTarget
-		console.log(option)
 		setSelectedValue(option.value)
 	}
 	//endregion

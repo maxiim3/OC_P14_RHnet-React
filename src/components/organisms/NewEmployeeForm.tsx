@@ -2,16 +2,14 @@
 import React, {useContext, useEffect, useState} from "react"
 import Calendar from "maxiim3-date-picker/src/"
 import styled from "styled-components"
-import {OClick} from "../../misc/types"
+import {OClick, OInputSwitchProps} from "../../misc/types"
 import {BasedButton} from "../atoms/basedButton"
-import {InputText} from "../molecules/InputText"
-import {typography} from "../../styles/constants.styled"
-import {InputSelector} from "../molecules/InputSelector"
-import statesOptions from "../../misc/statesOption"
-import departmentOptions from "../../misc/departmentOptions"
+import {InputText} from "./InputText"
+import {screens, typography} from "../../styles/constants.styled"
+import {InputSelector} from "./InputSelector"
 import {createPortal} from "react-dom"
 import {AiFillCloseCircle, GiPartyPopper} from "react-icons/all"
-import {DateInputConstants, FormInputContext} from "../../pages/NewEmployeePage"
+import {FormInputContext, inputFields} from "../../pages/NewEmployeePage"
 //endregion
 
 //region Hook
@@ -33,16 +31,28 @@ const useFormInputContext = () => {
 //region Components
 //region atoms
 export const FormFieldsetStyled = styled.fieldset`
-	max-width: 625px;
-	padding: 1rem 3rem;
+	max-width: fit-content;
 	margin: 1rem auto;
 	border: 1px dashed ${props => props.theme.txt.rgba(0.2)};
+	padding: 1rem 3rem;
+	@media (min-width: ${screens.screen200}) {
+	}
 `
 
 export const FormLegendStyled = styled.legend`
 	font-family: ${typography.primary};
 	font-size: 1.5em;
 	color: ${props => props.theme.txt.rgba(0.2)};
+`
+
+const Form = styled.form`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-block: clamp(36px, 10vh, 72px) clamp(48px, 12vh, 96px);
+	gap: 24px;
 `
 export const ModalBackDropStyled = styled.div`
 	position: fixed;
@@ -117,7 +127,6 @@ export const ModalTextStyled = styled.p`
 `
 //endregion
 
-
 //region molecules
 export function CloseButton({onClick}: {onClick: (e: OClick) => void}) {
 	return (
@@ -126,6 +135,7 @@ export function CloseButton({onClick}: {onClick: (e: OClick) => void}) {
 		</ModalCloseButtonStyled>
 	)
 }
+
 export const ModalSuccessFeedback = ({onClose}: {onClose: (e: OClick) => void}) => (
 	<>
 		<ModalBackDropStyled />
@@ -145,98 +155,40 @@ export const ModalSuccessFeedback = ({onClose}: {onClose: (e: OClick) => void}) 
 	</>
 )
 
-//region inputs
-export function FirstNameInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputText
-			onChange={e => updateForm("firstName", e.currentTarget.value)}
-			slug="firstName"
-			description=""
-			label="First Name"
-		/>
-	)
-}
+const SubmitButton = styled(BasedButton)`
+	width: clamp(220px, 30vw, 440px);
+`
 
-export function LastNameInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputText
-			onChange={e => updateForm("lastName", e.currentTarget.value)}
-			slug="lastName"
-			description=""
-			label="Last Name"
-		/>
-	)
-}
-
-export function StreetInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputText
-			onChange={e => updateForm("street", e.currentTarget.value)}
-			slug="street"
-			description=""
-			label="Street"
-		/>
-	)
-}
-
-export function CityInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputText
-			onChange={e => updateForm("city", e.currentTarget.value)}
-			slug="city"
-			description=""
-			label="City"
-		/>
-	)
-}
-
-export function StateInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputSelector
-			handleSelection={e => updateForm("state", e.currentTarget.value)}
-			slug={"state"}
-			description={""}
-			label={"State"}
-			options={[...statesOptions]}
-		/>
-	)
-}
-
-export function ZipCodeInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputText
-			onChange={e => updateForm("zipCode", e.currentTarget.value)}
-			slug="zipCode"
-			description=""
-			label="Zip Code"
-		/>
-	)
-}
-
-export function DepartmentInput() {
-	const {updateForm} = useFormInputContext()
-	return (
-		<InputSelector
-			handleSelection={e => updateForm("department", e.currentTarget.value)}
-			slug={"department"}
-			description={""}
-			label={"Department"}
-			options={[...departmentOptions]}
-		/>
-	)
+const InputSwitch = ({slug, label, description, type, options}: OInputSwitchProps) => {
+	switch (type) {
+		case "text":
+			return (
+				<InputText
+					slug={slug}
+					description={description}
+					label={label}
+				/>
+			)
+		case "select":
+			return (
+				<InputSelector
+					slug={slug}
+					description={description}
+					label={label}
+					options={options ? [...options] : []}
+				/>
+			)
+		case "date":
+			return <Calendar inputLabel={label} />
+		default:
+			return null
+	}
 }
 
 //endregion
 
 //endregion
 
-//region organisms
 export function NewEmployeeForm() {
 	//region States
 	const [showModal, setModalVisibility] = useState(false)
@@ -245,7 +197,7 @@ export function NewEmployeeForm() {
 
 	//region Effects
 	useEffect(() => {
-		console.log(showModal)
+		console.log("Form FX - Show Modal : ", showModal ? "✅" : "❌")
 		if (showModal)
 			createPortal(
 				<ModalSuccessFeedback onClose={e => setModalVisibility(false)} />,
@@ -256,55 +208,75 @@ export function NewEmployeeForm() {
 
 	//region handler
 	const handleSubmitForm = (event: OClick) => {
-		let dateOfBirth = window.sessionStorage.getItem("date-of-birth")
-		let startingDate = window.sessionStorage.getItem("starting-date")
-		if (dateOfBirth) {
-			updateForm("dateOfBirth", dateOfBirth)
-		}
-		if (startingDate) {
-			updateForm("startingDate", startingDate)
-		}
+		// let dateOfBirth = window.sessionStorage.getItem("date-of-birth")
+		// let startingDate = window.sessionStorage.getItem("starting-date")
+		// if (dateOfBirth) {
+		// 	updateForm("dateOfBirth", dateOfBirth)
+		// }
+		// if (startingDate) {
+		// 	updateForm("startingDate", startingDate)
+		// }
 
-		console.log(form)
 		event.preventDefault()
-		let inputKeys = Object.keys(form)
-		let numberOfInputs = Object.keys(form).length
-		let validInput = 0
-		inputKeys.forEach(input => {
-			// console.log(`${input}: ${form[input]}`)
-			if (form[input] === "") {
-				console.log("invalid ", input)
-			} else {
-				validInput++
-			}
-		})
-		if (validInput === numberOfInputs) {
-			console.log("valid form")
-			setModalVisibility(true)
-		} else {
-			console.log("invalid form")
-		}
+		console.table(form)
+		// let inputKeys = Object.keys(form)
+		// let numberOfInputs = Object.keys(form).length
+		// let validInput = 0
+		// inputKeys.forEach(input => {
+		// 	// console.log(`${input}: ${form[input]}`)
+		// 	if (form[input] === "") {
+		// 		console.log("invalid ", input)
+		// 	} else {
+		// 		validInput++
+		// 	}
+		// })
+		// if (validInput === numberOfInputs) {
+		// 	console.log("valid form")
+		// 	setModalVisibility(true)
+		// } else {
+		// 	console.log("invalid form")
+		// }
 	}
 	//endregion
 
 	//region render
 	return (
 		<>
-			<form>
-				<FirstNameInput />
-				<LastNameInput />
-				<Calendar inputLabel={DateInputConstants.dateOfBirth.name} />
+			<Form onSubmit={e => e.preventDefault()}>
+				{inputFields.name.map((input, index) => (
+					<InputSwitch
+						key={index}
+						slug={input.slug}
+						label={input.label}
+						description={input.description}
+						type={input.type}
+						options={input.options}
+					/>
+				))}
 				<FormFieldsetStyled>
-					<FormLegendStyled>Address</FormLegendStyled>
-					<StreetInput />
-					<CityInput />
-					<StateInput />
-					<ZipCodeInput />
+					{inputFields.address.map((input, index) => (
+						<InputSwitch
+							key={index}
+							slug={input.slug}
+							label={input.label}
+							description={input.description}
+							type={input.type}
+							options={input.options}
+						/>
+					))}
 				</FormFieldsetStyled>
-				<Calendar inputLabel={DateInputConstants.startingDate.name} />
-				<DepartmentInput />
-				<BasedButton onSubmit={handleSubmitForm}>Submit</BasedButton>
-			</form>
+				{inputFields.job.map((input, index) => (
+					<InputSwitch
+						key={index}
+						slug={input.slug}
+						label={input.label}
+						description={input.description}
+						type={input.type}
+						options={input.options}
+					/>
+				))}
+				<SubmitButton onClick={handleSubmitForm}>Submit</SubmitButton>
+			</Form>
 		</>
 	)
 	//endregionpstorm .

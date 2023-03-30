@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import {OThemeProps} from "../../layouts/WrapperProvider"
 
-const FooterContainerStyled = styled.footer`
+const Footer = styled.footer`
 	background: ${({theme}: OThemeProps) => theme.txt.rgba(0.8)};
 	color: ${({theme}: OThemeProps) => theme.bg.rgba(0.4)};
 	display: flex;
@@ -17,12 +17,12 @@ const FooterContainerStyled = styled.footer`
 
 export const FooterComposition = () => {
 	return (
-		<FooterContainerStyled>
+		<Footer>
 			<p>
 				Edit <code>src/App.tsx</code> and save to test HMR
 			</p>
 			<p>This is a template </p>
 			<p>Made by Maxime Tamburrini 2023</p>
-		</FooterContainerStyled>
+		</Footer>
 	)
 }
