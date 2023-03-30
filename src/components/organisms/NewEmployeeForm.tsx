@@ -4,7 +4,7 @@ import Calendar from "maxiim3-date-picker/src/"
 import styled from "styled-components"
 import {OClick} from "../../misc/types"
 import {BasedButton} from "../atoms/basedButton"
-import {InputTextFactory} from "../molecules/InputTextFactory"
+import {InputText} from "../molecules/InputText"
 import {typography} from "../../styles/constants.styled"
 import {InputSelector} from "../molecules/InputSelector"
 import statesOptions from "../../misc/statesOption"
@@ -149,7 +149,7 @@ export const ModalSuccessFeedback = ({onClose}: {onClose: (e: OClick) => void}) 
 export function FirstNameInput() {
 	const {updateForm} = useFormInputContext()
 	return (
-		<InputTextFactory
+		<InputText
 			onChange={e => updateForm("firstName", e.currentTarget.value)}
 			slug="firstName"
 			description=""
@@ -161,7 +161,7 @@ export function FirstNameInput() {
 export function LastNameInput() {
 	const {updateForm} = useFormInputContext()
 	return (
-		<InputTextFactory
+		<InputText
 			onChange={e => updateForm("lastName", e.currentTarget.value)}
 			slug="lastName"
 			description=""
@@ -173,7 +173,7 @@ export function LastNameInput() {
 export function StreetInput() {
 	const {updateForm} = useFormInputContext()
 	return (
-		<InputTextFactory
+		<InputText
 			onChange={e => updateForm("street", e.currentTarget.value)}
 			slug="street"
 			description=""
@@ -185,7 +185,7 @@ export function StreetInput() {
 export function CityInput() {
 	const {updateForm} = useFormInputContext()
 	return (
-		<InputTextFactory
+		<InputText
 			onChange={e => updateForm("city", e.currentTarget.value)}
 			slug="city"
 			description=""
@@ -210,7 +210,7 @@ export function StateInput() {
 export function ZipCodeInput() {
 	const {updateForm} = useFormInputContext()
 	return (
-		<InputTextFactory
+		<InputText
 			onChange={e => updateForm("zipCode", e.currentTarget.value)}
 			slug="zipCode"
 			description=""

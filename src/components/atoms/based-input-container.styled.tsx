@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const InputContainerStyled = styled.div`
+export const BasedInputContainer = styled.div`
   display: flex;
   align-items: start;
   flex-flow: column;

@@ -2,7 +2,7 @@ import styled from "styled-components"
 import {typography} from "../../styles/constants.styled"
 import {OThemeProps} from "../../layouts/WrapperProvider"
 
-export const InputTextStyled = styled.input`
+export const InputStyled = styled.input`
 	font-family: ${typography.secondary};
 	position: relative;
 	width: 100%;

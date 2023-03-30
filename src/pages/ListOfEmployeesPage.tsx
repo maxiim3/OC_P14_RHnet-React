@@ -2,7 +2,7 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
 import {InputSelector} from "../components/molecules/InputSelector"
-import {InputTextFactory} from "../components/molecules/InputTextFactory"
+import {InputText} from "../components/molecules/InputText"
 import {OClick, OColumnPath, OInputSearchValue, OLabel, OSortingOrder} from "../misc/types"
 import {listOf20MockedEmployees} from "../misc/ListOf20MockedEmployees"
 import {BsTriangleFill} from "react-icons/all"
@@ -230,7 +230,7 @@ export function ListOfEmployeesPage() {
 						/>
 					</div>
 					<div className="filter">
-						<InputTextFactory
+						<InputText
 							value={searchFilter.value}
 							slug={"filter"}
 							description={""}
