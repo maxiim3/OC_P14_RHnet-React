@@ -1,38 +1,42 @@
-import {OChildren} from "../misc/types"
+import {OChildren, OClassName} from "../misc/types"
 import React from "react"
 import styled from "styled-components"
+import {typography} from "../styles/constants.styled"
+import {clampFluidSize} from "../misc/clampFluidSize"
 
-//region components
-//region atoms
-export const Main = styled.main`
+type PageTemplateProps = OChildren & {routeTitle: string} & OClassName
+
+const PageTemplateFactory = styled((props: PageTemplateProps) => {
+	const {className, children, routeTitle} = props
+	return (
+		<main className={className}>
+			<h1 className={"staticTitle"}>HRnet</h1>
+			<h2 className={"dynamicTitle"}>{routeTitle}</h2>
+			{children}
+		</main>
+	)
+})`
 	background: ${({theme}) => theme.bg.rgb};
 	color: ${({theme}) => theme.txt.rgb};
 	overflow-x: scroll;
-`
+  //min-height: 400px;
 
-export const H1 = styled.h1`
-	text-align: center;
-	margin-inline: auto;
-	font-size: clamp(28px, 6vw, 54px);
-`
+	.staticTitle {
+		font-family: ${typography.primary};
+		text-align: center;
+		font-weight: bold;
+		margin-inline: auto;
+		font-size: ${clampFluidSize(16, 48)};
+	}
 
-export const H2 = styled.h1`
-	margin-bottom: 24px;
-	text-align: center;
-	margin-inline: auto;
-	font-size: clamp(24px, 5.2vw, 32px);
+	.dynamicTitle {
+		font-family: ${typography.secondary};
+		font-weight: 500;
+		margin-bottom: 24px;
+		text-align: center;
+		margin-inline: auto;
+		font-size: ${clampFluidSize(14, 32)};
+	}
 `
-//endregion
-
-const PageTemplateFactory = ({children, activeRoute}: OChildren & {activeRoute: string}) => {
-	return (
-		<Main className={"main"}>
-			<H1>HRnet</H1>
-			<H2>{activeRoute}</H2>
-			{children}
-		</Main>
-	)
-}
 
 export default PageTemplateFactory
-//endregion

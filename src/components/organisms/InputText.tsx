@@ -1,10 +1,11 @@
 import {ODescription, OLabel, OSlug} from "../../misc/types"
-import React, {ReactEventHandler, useEffect, useMemo, useState} from "react"
+import React, {ReactEventHandler, useContext, useEffect, useMemo, useState} from "react"
 import {BasedInputContainer} from "../atoms/based-input-container.styled"
 import {InputStyled} from "../atoms/input.styled"
 import {BasedInputLabelStyled} from "../atoms/based-input-label.styled"
 import styled from "styled-components"
 import {OThemeProps} from "../../layouts/WrapperProvider"
+import {FormInputContext, FormInputContextDispatcher} from "../../pages/NewEmployeePage"
 //region types and models
 type InputTextFactoryProps = OSlug &
 	OLabel &
@@ -52,7 +53,10 @@ const Input = styled(InputStyled)<OThemeProps>`
 //endregion
 
 //region Component
-export function InputText({slug, label, description, onChange}: InputTextFactoryProps) {
+export function InputText({slug, label, description}: InputTextFactoryProps) {
+	const formCtx = useContext(FormInputContext)!
+	const dispatchFormCtx = useContext(FormInputContextDispatcher)!
+
 	//region constants
 	const minLength = 4
 	const maxLength = 60
@@ -77,6 +81,7 @@ export function InputText({slug, label, description, onChange}: InputTextFactory
 		if (!feedBackIsActive) {
 			setFeedbackMessage("")
 			setInputValidation(false)
+			updateContext("")
 			return
 		}
 
@@ -84,6 +89,7 @@ export function InputText({slug, label, description, onChange}: InputTextFactory
 		if (inputValue.length < minLength) {
 			setFeedbackMessage(`Please enter at least ${minLength} characters`)
 			setInputValidation(false)
+			updateContext("")
 			return
 		}
 
@@ -91,16 +97,24 @@ export function InputText({slug, label, description, onChange}: InputTextFactory
 		if (inputValue.length > maxLength) {
 			setFeedbackMessage(`Please enter less than ${maxLength} characters`)
 			setInputValidation(false)
+			updateContext("")
 			return
 		}
 
 		// Feedback is Active and ValidInput is true if Input is between minLength and maxLength characters
 		setFeedbackMessage("")
 		setInputValidation(true)
+		updateContext(inputValue)
 	}, [inputValue.length, feedBackIsActive, inputValue])
 	//endregion
-
 	//region handlers
+	const updateContext = (value: string) => {
+		if (!formCtx) {
+			throw new Error("useFormInputContext must be used within a FormInputProvider")
+		}
+		dispatchFormCtx({type: slug, payload: value})
+		return
+	}
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault()
 		setInputValue(e.currentTarget.value)
@@ -117,6 +131,7 @@ export function InputText({slug, label, description, onChange}: InputTextFactory
 				{!feedBackIsActive ? "✏️ " : validInput ? "✅ " : "❌ "} {label}
 			</Label>
 			<Input
+				data-feedback={feedBackIsActive}
 				data-validation={handleDataSet}
 				aria-description={description}
 				autoComplete={slug}

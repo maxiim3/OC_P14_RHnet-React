@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useEffect, useReducer} from "react"
+import React, {createContext, useEffect, useReducer} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
 import {NewEmployeeForm} from "../components/organisms/NewEmployeeForm"
 import {OChildren, OInputSwitchProps} from "../misc/types"
@@ -93,7 +93,7 @@ export const inputFields: {
 /**
  * Type for the form actions reducer
  */
-type OFormActions = {
+export type OFormActions = {
 	type:
 		| "firstName"
 		| "lastName"
@@ -123,10 +123,6 @@ interface IFormModel {
 	zipCode: string
 }
 
-/**
- * forwards the type of the form context
- */
-type OFormContext = ReturnType<typeof useFormInit>
 //endregion
 
 //region Reducer
@@ -154,6 +150,7 @@ const formReducer = (previousState: IFormModel, action: OFormActions) => {
 		case "zipCode":
 			return {...previousState, zipCode: action.payload}
 		case "startingDate":
+			console.log('coucou')
 			return {...previousState, startingDate: action.payload}
 		case "department":
 			return {...previousState, department: action.payload}
@@ -170,11 +167,11 @@ const formReducer = (previousState: IFormModel, action: OFormActions) => {
  */
 const initialFormState: IFormModel = {
 	city: "",
-	dateOfBirth: window.sessionStorage.getItem(DateInputConstants.dateOfBirth.id) || "",
+	dateOfBirth: "",
 	department: "",
 	firstName: "",
 	lastName: "",
-	startingDate: window.sessionStorage.getItem(DateInputConstants.startingDate.id) || "",
+	startingDate: "",
 	state: "",
 	street: "",
 	zipCode: "",
@@ -184,29 +181,34 @@ const initialFormState: IFormModel = {
  * @hook
  * @return {{form: never, updateForm: (type: OFormActions["type"], payload: OFormActions["payload"]) => void}}
  */
-export const useFormInit = () => {
+export const initForm = () => {
 	const [form, dispatch] = useReducer(formReducer, initialFormState)
-	const updateForm = useCallback(
-		(type: OFormActions["type"], payload: OFormActions["payload"]) => {
-			dispatch({type, payload})
-		},
-		[]
-	)
-	return {form, updateForm}
+
+	return {form, dispatch}
 }
 //endregion
 
 /**
  * Context for the form input
  * @context
- * @type {React.Context<OFormContext | undefined>}
+ * @type {React.Context<OFormModel | undefined>}
  */
-export const FormInputContext = createContext<OFormContext | undefined>(undefined)
-
+export const FormInputContext = createContext<IFormModel | undefined>(undefined)
+export const FormInputContextDispatcher = createContext<React.Dispatch<OFormActions> | undefined>(
+	undefined
+)
 //region context provider
 const FormContextProvider = ({children}: OChildren) => {
-	return <FormInputContext.Provider value={useFormInit()}>{children}</FormInputContext.Provider>
+	const {form, dispatch} = initForm()
+	return (
+		<FormInputContext.Provider value={form}>
+			<FormInputContextDispatcher.Provider value={dispatch}>
+				{children}
+			</FormInputContextDispatcher.Provider>
+		</FormInputContext.Provider>
+	)
 }
+
 //endregion
 //endregion
 
@@ -215,7 +217,7 @@ export function NewEmployeePage() {
 		window.sessionStorage.clear()
 	}, [])
 	return (
-		<PageTemplateFactory activeRoute={"Create Employee"}>
+		<PageTemplateFactory routeTitle={"Create Employee"}>
 			<FormContextProvider>
 				<NewEmployeeForm />
 			</FormContextProvider>

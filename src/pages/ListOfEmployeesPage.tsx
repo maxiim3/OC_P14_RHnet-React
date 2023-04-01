@@ -216,7 +216,7 @@ export function ListOfEmployeesPage() {
 
 	//region render
 	return (
-		<PageTemplateFactory activeRoute={"Team Members"}>
+		<PageTemplateFactory routeTitle={"Team Members"}>
 			<section>
 				<header>
 					<div className="number-of-results">

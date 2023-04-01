@@ -45,7 +45,7 @@ const NavButton = styled((props: NavButtonProps) => {
 
 export const HomePage = () => {
 	return (
-		<PageTemplateFactory activeRoute={"Welcome to HRnet"}>
+		<PageTemplateFactory routeTitle={"Welcome to HRnet"} >
 			<Navigation>
 				<NavButton
 					navigateTo={Path.newEmployee}

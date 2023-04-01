@@ -40,7 +40,7 @@ const useThemeAPI = () => {
 	return [theme, toggleTheme]
 }
 export const useThemeProvider = () => {
-	const [theme, toggleTheme] = useContext(ThemedContext) as ReturnType<typeof useThemeAPI>
+	const [theme, toggleTheme] = useContext(ThemedContext)! as ReturnType<typeof useThemeAPI>
 	if (!theme) {
 		throw new Error("useTheme must be used within a ThemeProvider")
 	}

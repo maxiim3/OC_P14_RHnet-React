@@ -1,9 +1,9 @@
 // Custom useErrorBoundary hook
 import React, {ReactElement, useState} from "react"
 import {WrapperProvider} from "./WrapperProvider"
-import {HeaderBanner} from "../components/organisms/HeaderBanner"
+import {Header} from "../components/organisms/Header"
 import {Outlet} from "react-router-dom"
-import {FooterComposition} from "../components/molecules/Footer"
+import {Footer} from "../components/molecules/Footer"
 
 function useErrorBoundary() {
 	const [error, setError] = useState<Error | null>(null)
@@ -85,9 +85,9 @@ export function PageLayout() {
 		<>
 			<ErrorBoundary fallback={<FallbackComponent />}>
 				<WrapperProvider>
-					<HeaderBanner />
+					<Header />
 					<Outlet />
-					<FooterComposition />
+					<Footer />
 				</WrapperProvider>
 			</ErrorBoundary>
 		</>
