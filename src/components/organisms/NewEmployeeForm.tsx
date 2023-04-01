@@ -1,8 +1,8 @@
 //region imports
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import Calendar from "maxiim3-date-picker/src/"
 import styled from "styled-components"
-import {OClick, OInputSwitchProps} from "../../misc/types"
+import {IEmployee, OClick, OInputSwitchProps} from "../../misc/types"
 import {BasedButton} from "../atoms/basedButton"
 import {InputText} from "./InputText"
 import {screens, typography} from "../../styles/constants.styled"
@@ -13,22 +13,7 @@ import {
 	FormInputContextDispatcher,
 	inputFields,
 } from "../../pages/NewEmployeePage"
-//endregion
-
-//region Hook
-/**
- * @description hook for the form context
- * @hook
- */
-const useFormInputContext = () => {
-	const context = useContext(FormInputContext)
-
-	if (!context) {
-		throw new Error("useFormInputContext must be used within a FormInputProvider")
-	}
-
-	return context
-}
+import employeeService from "../../api/employeeService"
 //endregion
 
 //region Components
@@ -130,7 +115,15 @@ const InputSwitch = ({slug, label, description, type, options}: OInputSwitchProp
 export function NewEmployeeForm() {
 	const formCtx = useContext(FormInputContext)!
 	const dispatchFormCtx = useContext(FormInputContextDispatcher)!
+	const [id, setId] = useState(0)
 
+	useEffect(() => {
+		employeeService.getEmployees().then((res: any) => {
+			const employees: IEmployee[] = res.data as IEmployee[]
+			setId(employees.length + 2) // +2 because ids in db starts at 1 and need to increment by 1 more to get the next id
+		})
+	}, [])
+	console.log(id, "id")
 	const [createdWithSuccess, setCreatedWithSuccess] = useState(false)
 	//region handler
 
@@ -149,7 +142,7 @@ export function NewEmployeeForm() {
 				countValidInputs++ // increment valid inputs
 			} else if (key === "dateOfBirth") {
 				let dateOfBirtValue = sessionStorage.getItem("date-of-birth")
-				console.log(dateOfBirtValue)
+				// console.log(dateOfBirtValue)
 				if (dateOfBirtValue) {
 					countValidInputs++
 					dispatchFormCtx({type: "dateOfBirth", payload: dateOfBirtValue})
@@ -159,12 +152,14 @@ export function NewEmployeeForm() {
 			} else if (key === "startingDate") {
 				let startingDateValue = sessionStorage.getItem("starting-date")
 				if (startingDateValue) {
-					console.log(startingDateValue, "starting date")
+					// console.log(startingDateValue, "starting date")
 					countValidInputs++
 					dispatchFormCtx({type: "startingDate", payload: startingDateValue})
 				} else {
 					invalidInputs.push("startingDate")
 				}
+			} else if (key === "id") {
+				dispatchFormCtx({type: "id", payload: id})
 			} else {
 				invalidInputs.push(key) // push invalid inputs
 			}
@@ -175,6 +170,10 @@ export function NewEmployeeForm() {
 			setCreatedWithSuccess(true)
 			// append employee to list of employees
 			// reset form context values to initial
+			employeeService.createEmployee(formCtx).then(res => {
+				console.log(res)
+				dispatchFormCtx({type: "reset"})
+			})
 		} else {
 			setCreatedWithSuccess(false)
 
@@ -213,18 +212,21 @@ export function NewEmployeeForm() {
 	return (
 		<>
 			<Form onSubmit={e => e.preventDefault()}>
-				{inputFields.name.map((input, index) => (
-					<InputSwitch
-						key={index}
-						slug={input.slug}
-						label={input.label}
-						description={input.description}
-						type={input.type}
-						options={input.options}
-					/>
-				))}
 				<Fieldset>
-					<Legend>Address</Legend>
+					<Legend>👤 Employee</Legend>
+					{inputFields.name.map((input, index) => (
+						<InputSwitch
+							key={index}
+							slug={input.slug}
+							label={input.label}
+							description={input.description}
+							type={input.type}
+							options={input.options}
+						/>
+					))}
+				</Fieldset>
+				<Fieldset>
+					<Legend>🏠 Address</Legend>
 					{inputFields.address.map((input, index) => (
 						<InputSwitch
 							key={index}
@@ -236,16 +238,19 @@ export function NewEmployeeForm() {
 						/>
 					))}
 				</Fieldset>
-				{inputFields.job.map((input, index) => (
-					<InputSwitch
-						key={index}
-						slug={input.slug}
-						label={input.label}
-						description={input.description}
-						type={input.type}
-						options={input.options}
-					/>
-				))}
+				<Fieldset>
+					<Legend>💼 Job</Legend>
+					{inputFields.job.map((input, index) => (
+						<InputSwitch
+							key={index}
+							slug={input.slug}
+							label={input.label}
+							description={input.description}
+							type={input.type}
+							options={input.options}
+						/>
+					))}
+				</Fieldset>
 				<SubmitButton onClick={handleSubmitForm}>Submit</SubmitButton>
 			</Form>
 		</>

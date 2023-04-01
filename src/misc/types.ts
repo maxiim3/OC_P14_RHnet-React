@@ -39,17 +39,6 @@ export type OColumnPath = {
 		| "city"
 		| "zipCode"
 }
-export type ODepartmentOptions = "Sales" | "Marketing" | "Engineering" | "Human Resources" | "Legal"
-export type OEmployee = {
-	firstName: string
-	lastName: string
-	startingDate: Date
-	department: ODepartmentOptions
-	dateOfBirth: Date
-	street: string
-	city: string
-	zipCode: string
-}
 export type OInputSearchValue = {
 	value: string | null
 } //endregion
@@ -66,4 +55,21 @@ export type OInputSwitchProps = {
 	description?: string
 	type: "text" | "select" | "date"
 	options?: {label: string; slug?: string}[]
+}
+
+/**
+ * interface of the form model
+ * @interface IEmployee
+ */
+export interface IEmployee {
+	id: number
+	city: string
+	dateOfBirth: string
+	department: string
+	firstName: string
+	lastName: string
+	startingDate: string
+	state: string
+	street: string
+	zipCode: string
 }

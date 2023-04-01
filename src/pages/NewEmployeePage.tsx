@@ -1,7 +1,7 @@
 import React, {createContext, useEffect, useReducer} from "react"
 import PageTemplateFactory from "../layouts/PageTemplateFactory"
 import {NewEmployeeForm} from "../components/organisms/NewEmployeeForm"
-import {OChildren, OInputSwitchProps} from "../misc/types"
+import {IEmployee, OChildren, OInputSwitchProps} from "../misc/types"
 import statesOptions from "../misc/statesOption"
 import departmentOptions from "../misc/departmentOptions"
 //region context
@@ -74,16 +74,16 @@ export const inputFields: {
 	],
 	job: [
 		{
-			label: DateInputConstants.startingDate.name,
-			slug: DateInputConstants.startingDate.id,
-			type: "date",
-		},
-		{
 			slug: "department",
 			label: "Department",
 			description: "",
 			type: "select",
 			options: departmentOptions,
+		},
+		{
+			label: DateInputConstants.startingDate.name,
+			slug: DateInputConstants.startingDate.id,
+			type: "date",
 		},
 	],
 }
@@ -93,34 +93,43 @@ export const inputFields: {
 /**
  * Type for the form actions reducer
  */
-export type OFormActions = {
-	type:
-		| "firstName"
-		| "lastName"
-		| "dateOfBirth"
-		| "street"
-		| "city"
-		| "state"
-		| "zipCode"
-		| "startingDate"
-		| "department"
-	payload: string
-}
+export type OFormActions =
+	| {
+			type:
+				| "firstName"
+				| "lastName"
+				| "dateOfBirth"
+				| "street"
+				| "city"
+				| "state"
+				| "zipCode"
+				| "startingDate"
+				| "department"
+			payload: string
+	  }
+	| {
+			type: "id"
+			payload: number
+	  }
+	| {
+			type: "reset"
+	  }
 
 /**
- * interface of the form model
- * @interface IFormModel
+ * initial state of the form
+ * @type {{firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string}}
  */
-interface IFormModel {
-	city: string
-	dateOfBirth: string
-	department: string
-	firstName: string
-	lastName: string
-	startingDate: string
-	state: string
-	street: string
-	zipCode: string
+const initialFormState: IEmployee = {
+	id: 0,
+	city: "",
+	dateOfBirth: "",
+	department: "",
+	firstName: "",
+	lastName: "",
+	startingDate: "",
+	state: "",
+	street: "",
+	zipCode: "",
 }
 
 //endregion
@@ -129,12 +138,14 @@ interface IFormModel {
 /**
  * @description reducer for the form actions | update the form state
  * @reducer
- * @param {IFormModel} previousState
+ * @param {IEmployee} previousState
  * @param {OFormActions} action
- * @return {{firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | IFormModel | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string}}
+ * @return {{firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | IEmployee | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string} | {firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string}}
  */
-const formReducer = (previousState: IFormModel, action: OFormActions) => {
+const formReducer = (previousState: IEmployee, action: OFormActions) => {
 	switch (action.type) {
+		case "id":
+			return {...previousState, id: action.payload}
 		case "firstName":
 			return {...previousState, firstName: action.payload}
 		case "lastName":
@@ -150,32 +161,18 @@ const formReducer = (previousState: IFormModel, action: OFormActions) => {
 		case "zipCode":
 			return {...previousState, zipCode: action.payload}
 		case "startingDate":
-			console.log('coucou')
 			return {...previousState, startingDate: action.payload}
 		case "department":
 			return {...previousState, department: action.payload}
-
+		case "reset":
+			return {...initialFormState}
 		default:
 			return previousState
 	}
 }
 //endregion
 //region initializations
-/**
- * initial state of the form
- * @type {{firstName: string, lastName: string, zipCode: string, city: string, street: string, dateOfBirth: string, state: string, department: string, startingDate: string}}
- */
-const initialFormState: IFormModel = {
-	city: "",
-	dateOfBirth: "",
-	department: "",
-	firstName: "",
-	lastName: "",
-	startingDate: "",
-	state: "",
-	street: "",
-	zipCode: "",
-}
+
 /**
  * @description hook for the form initialization
  * @hook
@@ -193,7 +190,7 @@ export const initForm = () => {
  * @context
  * @type {React.Context<OFormModel | undefined>}
  */
-export const FormInputContext = createContext<IFormModel | undefined>(undefined)
+export const FormInputContext = createContext<IEmployee | undefined>(undefined)
 export const FormInputContextDispatcher = createContext<React.Dispatch<OFormActions> | undefined>(
 	undefined
 )

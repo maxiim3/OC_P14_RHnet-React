@@ -6,7 +6,8 @@ import {ErrorPage} from "./pages/ErrorPage"
 import {PageLayout} from "./layouts/PageLayout"
 import {HomePage} from "./pages/HomePage"
 
-const API_URL = "http://127.0.0.1:5173/api/employees.json"
+export const API_URL = `http://localhost:3001/employees` // run `npm run api` ->  json-server --watch db.json --port 3001
+export const DB_URL = `http://localhost:3001/db` // run `npm run api` ->  json-server --watch db.json --port 3001
 
 export const Routes = createBrowserRouter(
 	createRoutesFromElements(
