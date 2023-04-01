@@ -4,24 +4,29 @@ import Path from "../misc/config.path"
 import React from "react"
 import styled from "styled-components"
 import {useNavigate} from "react-router-dom"
-import {OClick} from "../misc/types"
+import {OClassName, OClick} from "../misc/types"
+import {screens} from "../styles/constants.styled"
+import {clampFluidSize} from "../misc/clampFluidSize"
 
 const Navigation = styled.nav`
 	margin-block: 64px;
 	display: flex;
-	flex-direction: row;
-	flex-flow: nowrap;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 32px;
+
+	@media (min-width: ${screens.screen100}) {
+		flex-direction: row;
+	}
 `
 
 type NavButtonProps = {
 	navigateTo: string
 	label: string
-}
+} & OClassName
 const NavButton = styled((props: NavButtonProps) => {
-	const {navigateTo, label} = props
+	const {navigateTo, label, className} = props
 	const navigate = useNavigate()
 
 	const handleCLickEvent = (e: OClick) => {
@@ -29,23 +34,30 @@ const NavButton = styled((props: NavButtonProps) => {
 		navigate(navigateTo)
 	}
 
-	return <BasedButton onClick={handleCLickEvent}>{label}</BasedButton>
+	return (
+		<BasedButton
+			className={className}
+			onClick={handleCLickEvent}>
+			{label}
+		</BasedButton>
+	)
 })`
-	width: clamp(120px, 40vw, 250px);
-	border-radius: 12px;
+	width: ${clampFluidSize(160, 300)};
+	border-radius: 200px;
 	transition: all 120ms ease-in-out;
-	background: ${({theme}) => theme.txt.rgba(0.05)};
+	background: ${({theme}) => theme.txt.rgba(0.04)};
 	color: ${({theme}) => theme.txt.rbg};
+	font-size: ${clampFluidSize(12, 24)};
 
 	&:hover {
 		background: ${({theme}) => theme.txt.rgba(0.1)};
-		color: ${({theme}) => theme.bg.rgba(0.8)};
+		color: ${({theme}) => theme.txt.rgb};
 	}
 `
 
 export const HomePage = () => {
 	return (
-		<PageTemplateFactory routeTitle={"Welcome to HRnet"} >
+		<PageTemplateFactory routeTitle={"Welcome to HRnet"}>
 			<Navigation>
 				<NavButton
 					navigateTo={Path.newEmployee}
