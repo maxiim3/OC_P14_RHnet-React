@@ -10,6 +10,14 @@
 
 ## Usage
 
+### Start DB Server
+
+```bash
+    npm run api
+```
+
+### Start App Server
+
 ```bash
     npm run dev
 ```
@@ -26,4 +34,4 @@
 
 ## Author
 
-[Your Name]
+[Maxime Tamburrini](htps://github.com/maxiim3)

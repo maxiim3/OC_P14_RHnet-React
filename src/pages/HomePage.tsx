@@ -54,7 +54,6 @@ const NavButton = styled((props: NavButtonProps) => {
 		color: ${({theme}) => theme.txt.rgb};
 	}
 `
-
 export const HomePage = () => {
 	return (
 		<PageTemplateFactory routeTitle={"Welcome to HRnet"}>

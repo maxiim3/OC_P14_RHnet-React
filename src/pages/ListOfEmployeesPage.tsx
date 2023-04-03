@@ -4,6 +4,7 @@ import {IEmployee} from "../misc/types"
 import employeeService from "../api/employeeService"
 import styled from "styled-components"
 import {OThemeProps} from "../layouts/WrapperProvider"
+import {clampFluidSize} from "../misc/clampFluidSize"
 
 // TODO add style to page
 const columns = [
@@ -18,9 +19,77 @@ const columns = [
 ]
 
 const options = [3, 5, 10, 15, 20, 30]
+
+const cellWidth = () => clampFluidSize(88, 120)
+
+const TableNavigation = styled.div`
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 1rem 0;
+	column-gap: 48px;
+	row-gap: 24px;
+
+	[aria-label="select-items"] {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		background-color: ${props => props.theme.txt.rgba(0.1)};
+		color: ${props => props.theme.txt.rgba(0.6)};
+	}
+
+	[aria-label="table-navigation"] {
+		display: flex;
+		gap: 4px;
+		align-items: center;
+
+		button {
+			padding: 0.5rem;
+			border: none;
+			border-radius: 4px;
+			background-color: ${props => props.theme.txt.rgba(0.3)};
+			color: ${props => props.theme.txt.rgba(0.6)};
+			transition: scale 44ms ease-in-out;
+			user-select: none;
+
+			&:hover {
+				scale: 1.03;
+			}
+
+			&:active,
+			&:focus-visible {
+				scale: 0.97;
+			}
+
+			&[data-active="true"] {
+				background-color: ${props => props.theme.txt.rgba(0.6)};
+				color: ${props => props.theme.bg.rgba(0.8)};
+				font-weight: bold;
+			}
+
+			&:disabled {
+				background-color: ${props => props.theme.txt.rgba(0.1)};
+				color: ${props => props.theme.txt.rgba(0.6)};
+				opacity: 0.7;
+				pointer-events: none;
+				cursor: not-allowed;
+			}
+		}
+	}
+`
+
 const GridRow = styled.ul`
 	display: grid;
 	grid-template-columns: repeat(${columns.length + 1}, 1fr);
+	border-bottom: 1px solid ${props => props.theme.txt.rgba(0.1)};
+`
+const GridCell = styled.li`
+	width: ${cellWidth()};
+	display: grid;
+	padding: 2px;
+	text-align: center;
+	font-size: 1em;
 `
 
 const HeaderGridRow = styled(GridRow)`
@@ -29,16 +98,27 @@ const HeaderGridRow = styled(GridRow)`
 `
 
 type HeaderItemProps = OThemeProps
-const HeaderItem = styled.li<HeaderItemProps>`
+const HeaderGridCell = styled.li<HeaderItemProps>`
 	padding: 0.5rem;
 	text-align: center;
 	border: none;
 	cursor: pointer;
+	font-size: 0.8em;
+	width: ${cellWidth()};
 
 	&[data-active="true"] {
 		background-color: ${props => props.theme.txt.rgba(0.6)};
 		color: ${props => props.theme.bg.rgba(0.8)};
 	}
+`
+
+const Table = styled.section`
+	overflow-x: scroll;
+	width: clamp(350px, 100vw, 1000px);
+	height: max-content;
+	margin-inline: auto;
+	font-size: ${clampFluidSize(12, 16)};
+	padding-bottom: 32px;
 `
 
 /**
@@ -94,87 +174,101 @@ export function ListOfEmployeesPage() {
 	return (
 		<PageTemplateFactory routeTitle={"Team Members"}>
 			<Suspense fallback={<h3>Loading...</h3>}>
-				<aside>
-					<label htmlFor="limit">Show</label>
-					<select
-						onChange={e => {
-							let selected = Number(e.currentTarget.value)
-							options.includes(selected)
-								? setLimit(selected)
-								: setLimit(employees.length)
-						}}
-						value={limit}
-						name="limit"
-						id="limit">
-						{[...options].map(option => (
-							<option
-								key={crypto.randomUUID()}
-								value={option}>
-								{option}
-							</option>
-						))}
-					</select>
-					<button onClick={() => setPage(prev => (prev === 1 ? 1 : prev - 1))}>◀</button>
-					{Array.from(Array(Math.ceil(employees.length / limit)).keys()).map(i => {
-						return (
-							<button
-								key={crypto.randomUUID()}
-								onClick={() => setPage(i + 1)}
-								disabled={page === i + 1}
-								data-active={page === i + 1}>
-								{i + 1}
-							</button>
-						)
-					})}
-					<button
-						onClick={() =>
-							setPage(prev =>
-								prev === Math.ceil(employees.length / limit) ? prev : prev + 1
-							)
-						}>
-						▶
-					</button>
-				</aside>
-				<section className="table">
-					<header>
-						<HeaderGridRow>
-							{columns.map((col, index) => (
-								<HeaderItem
-									data-active={sort === col.slug}
-									onClick={() => {
-										if (sort === col.slug) {
-											setOrder(order === "asc" ? "desc" : "asc")
-										}
-										setSort(col.slug)
-									}}
+				{/*Navigation*/}
+				<TableNavigation>
+					<section aria-label={"select-items"}>
+						<label htmlFor="limit">Items : </label>
+						<select
+							onChange={e => {
+								let selected = Number(e.currentTarget.value)
+								options.includes(selected)
+									? setLimit(selected)
+									: setLimit(employees.length)
+							}}
+							value={limit}
+							name="limit"
+							id="limit">
+							{[...options].map(option => (
+								<option
 									key={crypto.randomUUID()}
-									data-slug={col.slug}>
-									{col.label}{" "}
-									{sort === col.slug && order
-										? order === "asc"
-											? "▲"
-											: "▼"
-										: ""}
-								</HeaderItem>
+									value={option}>
+									{option}
+								</option>
 							))}
-						</HeaderGridRow>
-					</header>
+						</select>{" "}
+					</section>
+					{/*Previous button*/}
+					<section
+						aria-label={"table-navigation"}
+						role={"navigation"}>
+						<button
+							disabled={page === 1}
+							onClick={() => setPage(prev => (prev === 1 ? 1 : prev - 1))}>
+							◀
+						</button>
+						{/*Pages Button*/}
+						{Array.from(Array(Math.ceil(employees.length / limit)).keys()).map(i => {
+							return (
+								<button
+									aria-current={page === i + 1 ? "page" : undefined}
+									key={crypto.randomUUID()}
+									onClick={() => setPage(i + 1)}
+									disabled={page === i + 1}
+									data-active={page === i + 1}>
+									{i + 1}
+								</button>
+							)
+						})}
+						{/*Next button*/}
+						<button
+							disabled={page === Math.ceil(employees.length / limit)}
+							onClick={() =>
+								setPage(prev =>
+									prev === Math.ceil(employees.length / limit) ? prev : prev + 1
+								)
+							}>
+							▶
+						</button>
+					</section>
+				</TableNavigation>
+				{/*Table*/}
+				<Table
+					className="table"
+					role={"table"}>
+					<HeaderGridRow role={"rowheader"}>
+						{columns.map((col, index) => (
+							<HeaderGridCell
+								role={"columnheader"}
+								data-active={sort === col.slug}
+								onClick={() => {
+									if (sort === col.slug) {
+										setOrder(order === "asc" ? "desc" : "asc")
+									}
+									setSort(col.slug)
+								}}
+								key={crypto.randomUUID()}
+								data-slug={col.slug}>
+								{col.label}{" "}
+								{sort === col.slug && order ? (order === "asc" ? "▲" : "▼") : ""}
+							</HeaderGridCell>
+						))}
+					</HeaderGridRow>
 					<main>
 						{displayedEmployees.map((employee: IEmployee) => (
 							<GridRow key={crypto.randomUUID()}>
 								{columns.map((col, index) => {
 									return (
-										<li
+										<GridCell
 											key={crypto.randomUUID()}
 											data-slug={col.slug}>
 											{employee[col.slug]}
-										</li>
+										</GridCell>
 									)
 								})}
 							</GridRow>
 						))}
 					</main>
-				</section>
+				</Table>
 			</Suspense>
 		</PageTemplateFactory>
 	)

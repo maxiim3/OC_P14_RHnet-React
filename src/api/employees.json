@@ -256,6 +256,18 @@
       "state": "AK",
       "street": "bouba",
       "zipCode": "4355"
+    },
+    {
+      "id": 25,
+      "city": "Paris",
+      "dateOfBirth": "Fri Apr 21 2023",
+      "department": "Sales",
+      "firstName": "Maxime",
+      "lastName": "Tamburrini",
+      "startingDate": "Fri Apr 21 2023",
+      "state": "AK",
+      "street": "7 rue vavin",
+      "zipCode": "34150"
     }
   ]
 }
