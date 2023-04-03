@@ -105,9 +105,10 @@ $screen-800: 1440px;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 24px;
-
 	color: $clr-primary-900;
+
 	background-color: $clr-primary-0;
+	scroll-behavior: smooth;
 	color-scheme: light dark;
 
 	font-synthesis: none;

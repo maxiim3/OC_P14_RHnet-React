@@ -7,12 +7,14 @@ import {screens, typography} from "../../styles/constants.styled"
 import {OThemeProps} from "../../layouts/WrapperProvider"
 import {InputStyled} from "../atoms/input.styled"
 import {FormInputContext, FormInputContextDispatcher} from "../../pages/NewEmployeePage"
+import {clampFluidSize} from "../../misc/clampFluidSize"
 
 const Select = styled.select<OThemeProps>`
 	font-family: ${typography.secondary};
 	position: relative;
 	width: 100%;
 	padding: 12px 12px;
+  font-size: ${clampFluidSize(12, 18)};
 
 	@media (min-width: ${screens.screen200}) {
 	}

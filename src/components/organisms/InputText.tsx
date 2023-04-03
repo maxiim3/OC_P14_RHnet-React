@@ -6,6 +6,7 @@ import {BasedInputLabelStyled} from "../atoms/based-input-label.styled"
 import styled from "styled-components"
 import {OThemeProps} from "../../layouts/WrapperProvider"
 import {FormInputContext, FormInputContextDispatcher} from "../../pages/NewEmployeePage"
+import {clampFluidSize} from "../../misc/clampFluidSize"
 //region types and models
 type InputTextFactoryProps = OSlug &
 	OLabel &
@@ -14,13 +15,15 @@ type InputTextFactoryProps = OSlug &
 
 //region Styles
 const InputContainer = styled(BasedInputContainer)<OThemeProps>`
-	width: clamp(220px, 50vw, 625px);
+	width: clamp(220px, 80vw, 625px);
 `
-const Label = styled(BasedInputLabelStyled)<OThemeProps>``
+const Label = styled(BasedInputLabelStyled)<OThemeProps>`
+	${clampFluidSize(12, 16)};
+`
 
 const FeedBackMessage = styled.span<OThemeProps>`
 	color: ${({theme}: OThemeProps) => theme.txt.rgba(0.3)};
-	font-size: 12px;
+	font-size: ${clampFluidSize(8, 14)};
 	margin-top: 4px;
 	display: block;
 
@@ -38,6 +41,7 @@ const FeedBackMessage = styled.span<OThemeProps>`
 `
 const Input = styled(InputStyled)<OThemeProps>`
 	width: 100%;
+	font-size: ${clampFluidSize(12, 18)};
 
 	&[data-validation="true"] {
 		border-color: ${({theme}: OThemeProps) => theme?.success?.rgb || "green"};

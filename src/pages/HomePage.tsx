@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom"
 import {OClassName, OClick} from "../misc/types"
 import {screens} from "../styles/constants.styled"
 import {clampFluidSize} from "../misc/clampFluidSize"
+import {Logo} from "../components/atoms/Logo"
 
 const Navigation = styled.nav`
 	margin-block: 64px;
@@ -54,6 +55,32 @@ const NavButton = styled((props: NavButtonProps) => {
 		color: ${({theme}) => theme.txt.rgb};
 	}
 `
+const Wrapper = styled.div`
+	display: none;
+
+	@media (min-width: ${screens.screen200}) {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		margin-bottom: 150px;
+
+		> * {
+			animation: rotate 45s linear infinite;
+			height: ${clampFluidSize(160, 300)};
+			width: ${clampFluidSize(160, 300)};
+		}
+	}
+
+	@keyframes rotate {
+		0% {
+			transform: rotate(0turn);
+		}
+		100% {
+			transform: rotate(1turn);
+		}
+	}
+`
 export const HomePage = () => {
 	return (
 		<PageTemplateFactory routeTitle={"Welcome to HRnet"}>
@@ -67,6 +94,9 @@ export const HomePage = () => {
 					label={"Team Members"}
 				/>
 			</Navigation>
+			<Wrapper>
+				<Logo />
+			</Wrapper>
 		</PageTemplateFactory>
 	)
 }

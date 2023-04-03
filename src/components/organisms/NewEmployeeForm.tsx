@@ -14,16 +14,20 @@ import {
 	inputFields,
 } from "../../pages/NewEmployeePage"
 import employeeService from "../../api/employeeService"
+import {clampFluidSize} from "../../misc/clampFluidSize"
 //endregion
 
 //region Components
 //region atoms
 export const Fieldset = styled.fieldset`
-	max-width: fit-content;
-	margin: 1rem auto;
+	width: 100%;
+	margin-inline: auto;
+	padding: 1rem;
 	border: 1px dashed ${props => props.theme.txt.rgba(0.2)};
-	padding: 1rem 3rem;
-	@media (min-width: ${screens.screen200}) {
+	@media (min-width: ${screens.screen100}) {
+		max-width: fit-content;
+		margin: 1rem auto;
+		padding: 1rem 3rem;
 	}
 `
 
@@ -66,7 +70,7 @@ export const GifSuccess = styled.img`
 	margin-inline: auto;
 `
 export const TextSuccess = styled.p`
-	font-size: clamp(20px, 10vw, 32px);
+	font-size: clamp(16px, 10vw, 32px);
 	font-weight: bold;
 	text-align: center;
 	z-index: 1;
@@ -79,9 +83,32 @@ export const TextSuccess = styled.p`
 
 //region molecules
 const SubmitButton = styled(BasedButton)`
-	width: clamp(220px, 30vw, 440px);
+	width: clamp(100px, 80vw, 320px);
+	border-radius: 12px;
+	@media (min-width: ${screens.screen200}) {
+		width: clamp(220px, 30vw, 440px);
+		border-radius: 200px;
+	}
 `
+const StyledCalendar = styled(Calendar)`
+	font-size: ${clampFluidSize(12, 18)};
+	padding: 0.5rem;
+	margin: 0.5rem;
+	width: 100%;
+	background: ${props => props.theme.bg.rgb};
+	color: ${props => props.theme.txt.rgb};
+	border: 1px solid ${props => props.theme.txt.rgba(0.2)};
 
+	button {
+		background: ${props => props.theme.txt.rgba(0.1)};
+		color: ${props => props.theme.txt.rgb};
+	}
+
+	[role="dialog"] {
+		color: ${props => props.theme.txt.rgb};
+		background: ${props => props.theme.bg.rgb};
+	}
+`
 const InputSwitch = ({slug, label, description, type, options}: OInputSwitchProps) => {
 	switch (type) {
 		case "text":
@@ -102,7 +129,7 @@ const InputSwitch = ({slug, label, description, type, options}: OInputSwitchProp
 				/>
 			)
 		case "date":
-			return <Calendar inputLabel={label} />
+			return <StyledCalendar inputLabel={label} />
 		default:
 			return null
 	}

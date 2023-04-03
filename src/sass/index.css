@@ -7,6 +7,7 @@
   line-height: 24px;
   color: #41520b;
   background-color: #fbfbf6;
+  scroll-behavior: smooth;
   color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
