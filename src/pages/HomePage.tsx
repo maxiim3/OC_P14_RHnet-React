@@ -57,6 +57,7 @@ const NavButton = styled((props: NavButtonProps) => {
 `
 const Wrapper = styled.div`
 	display: none;
+	position: relative;
 
 	@media (min-width: ${screens.screen200}) {
 		display: flex;
@@ -65,10 +66,21 @@ const Wrapper = styled.div`
 		width: 100%;
 		margin-bottom: 150px;
 
+	  // make the logo spin infinitely
 		> * {
 			animation: rotate 45s linear infinite;
 			height: ${clampFluidSize(160, 300)};
 			width: ${clampFluidSize(160, 300)};
+		}
+
+	  // make the first logo as a shadow
+		> :first-child {
+			position: absolute;
+			scale: 115%;
+			top: 10px;
+			filter: grayscale(100%) blur(8px);
+			opacity: 0.2;
+		  	translate: -8px 4px;
 		}
 	}
 
@@ -81,6 +93,7 @@ const Wrapper = styled.div`
 		}
 	}
 `
+
 export const HomePage = () => {
 	return (
 		<PageTemplateFactory routeTitle={"Welcome to HRnet"}>
@@ -95,6 +108,9 @@ export const HomePage = () => {
 				/>
 			</Navigation>
 			<Wrapper>
+				{/*logo shadow*/}
+				<Logo />
+				{/*Logo*/}
 				<Logo />
 			</Wrapper>
 		</PageTemplateFactory>

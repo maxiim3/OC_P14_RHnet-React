@@ -12,7 +12,7 @@ import {screens} from "../../styles/constants.styled"
 import {Logo} from "../atoms/Logo"
 import {NavLink} from "react-router-dom"
 import Path from "../../misc/config.path"
-import {OClassName, ODescription, OIcon, OLabel, OPath} from "../../misc/types"
+import {OClassName, OClick, ODescription, OIcon, OLabel, OPath} from "../../misc/types"
 import {clampFluidSize} from "../../misc/clampFluidSize"
 
 //region atoms
@@ -21,11 +21,16 @@ import {clampFluidSize} from "../../misc/clampFluidSize"
 //region molecules
 export const ToggleThemeButton = styled(({className}: OClassName) => {
 	const {theme, toggleTheme} = useThemeProvider()
+	const handleClick = (e: OClick) => {
+		e.preventDefault()
+		// @ts-ignore
+		toggleTheme()
+	}
+
 	return (
-		/*@ts-ignore*/
 		<button
 			className={className}
-			onClick={toggleTheme}>
+			onClick={handleClick}>
 			{/*@ts-ignore*/}
 			{theme.slug === "light" ? <FiSun /> : <BsFillMoonStarsFill />}
 		</button>
@@ -118,7 +123,6 @@ export const NavLinkItem = styled(
 	align-items: center;
 	flex-direction: row;
 	justify-content: center;
-	//max-width: 240px;
 	padding-block: 8px;
 	padding-inline: ${clampFluidSize(0, 16)}; // fluid padding
 	gap: ${clampFluidSize(2, 16)}; // fluid gap
@@ -129,12 +133,13 @@ export const NavLinkItem = styled(
 
 	.link {
 		font-size: ${clampFluidSize(12, 20)}; // fluid font size
-		&.active {
-			color: ${({theme}: OThemeProps) => theme.txt.rgb};
-		}
 
 		&:visited {
 			color: ${({theme}: OThemeProps) => theme.txt.rgb};
+		}
+
+		&.active {
+			color: ${({theme}: OThemeProps) => theme.accent.rgb};
 		}
 	}
 
@@ -142,7 +147,7 @@ export const NavLinkItem = styled(
 		.icon {
 			font-size: ${clampFluidSize(16, 24)}; // fluid font size
 			display: block; // not visible on mobile
-			color: ${({theme}: OThemeProps) => theme.txt.rgb};
+			color: ${({theme}: OThemeProps) => theme.txt.rgba(0.8)};
 		}
 	}
 `

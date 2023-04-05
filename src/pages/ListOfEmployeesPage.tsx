@@ -6,7 +6,6 @@ import styled from "styled-components"
 import {OThemeProps} from "../layouts/WrapperProvider"
 import {clampFluidSize} from "../misc/clampFluidSize"
 
-// TODO add style to page
 const columns = [
 	{slug: "firstName", label: "first name"},
 	{slug: "lastName", label: "last name"},
