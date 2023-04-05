@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useReducer} from "react"
 import {css, ThemeProvider} from "styled-components"
-import {OClick} from "../misc/types"
 
 //region utils
 const convertHexToRGB = (hex: string) => {

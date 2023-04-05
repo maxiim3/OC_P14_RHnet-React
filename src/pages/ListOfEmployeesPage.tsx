@@ -235,7 +235,7 @@ export function ListOfEmployeesPage() {
 					className="table"
 					role={"table"}>
 					<HeaderGridRow role={"rowheader"}>
-						{columns.map((col, index) => (
+						{columns.map((col) => (
 							<HeaderGridCell
 								role={"columnheader"}
 								data-active={sort === col.slug}
@@ -255,7 +255,7 @@ export function ListOfEmployeesPage() {
 					<main>
 						{displayedEmployees.map((employee: IEmployee) => (
 							<GridRow key={crypto.randomUUID()}>
-								{columns.map((col, index) => {
+								{columns.map((col) => {
 									return (
 										<GridCell
 											key={crypto.randomUUID()}
